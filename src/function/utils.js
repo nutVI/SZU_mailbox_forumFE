@@ -18,20 +18,47 @@ export default {
     return Math.ceil(length / 664) * 23
   },
   getASPSESSION() {
-    return "ASPSESSIONIDQCRDQRRD=DNCFOFDBIPCLMNDPNIIOFIEE"
-    // let cookieStr = document.cookie.split('; ');
-    // let cookies = "null";
-    // let isFirst = true;
-    // for (const i in cookieStr) {
-    //   if (cookieStr[i].indexOf("ASPSESSION") !== -1) {
-    //     if (isFirst) {
-    //       cookies = cookieStr[i];
-    //       isFirst = false;
-    //     } else {
-    //       cookies += '; ' + cookieStr[i];
-    //     }
-    //   }
-    // }
-    // return cookies
+    let cookieStr = document.cookie.split('; ');
+    let cookies = "null";
+    let isFirst = true;
+    for (const i in cookieStr) {
+      if (cookieStr[i].indexOf("ASPSESSION") !== -1) {
+        if (isFirst) {
+          cookies = cookieStr[i];
+          isFirst = false;
+        } else {
+          cookies += '; ' + cookieStr[i];
+        }
+      }
+    }
+    return cookies
+  },
+  async httpMethod(method, url, data) {
+    url = process.env.VUE_APP_Url + url
+    const xml = new XMLHttpRequest();
+    xml.withCredentials = true
+    let str = '';
+    let isFirst = true;
+    for (const i in data) {
+      if (isFirst) {
+        isFirst = false;
+        str += i + '=' + data[i]
+      } else str += '&' + i + '=' + data[i]
+    }
+
+    if (method == 'GET' || method == 'DELETE') {
+      xml.open(method, url + '?' + str);
+      xml.send(null);
+    } else if (method == 'POST') {
+      xml.open(method, url);
+      xml.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+      xml.send(str);
+    }
+    return new Promise((resolve, reject) => {
+      xml.onload = () => {
+        if (xml.status == 200) resolve(JSON.parse(xml.responseText))
+        else reject(xml.responseText);
+      }
+    })
   },
 }
