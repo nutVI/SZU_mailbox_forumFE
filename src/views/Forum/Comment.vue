@@ -121,7 +121,7 @@
     methods: {
       async init() {
         const xml = new XMLHttpRequest();
-        xml.open('GET', "https://127.0.0.1" + "/login/");
+        xml.open('GET', process.env.VUE_APP_Url + "/login/");
         xml.withCredentials = true
         xml.setRequestHeader('Authorization', api.getASPSESSION());
         xml.send();

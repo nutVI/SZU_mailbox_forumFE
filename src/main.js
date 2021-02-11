@@ -1,5 +1,5 @@
 import Vue from 'vue'
-loadStyle('https://unpkg.com/element-ui@2.15.0/lib/theme-chalk/index.css')
+loadStyle('https://cdn.bootcdn.net/ajax/libs/element-ui/2.15.0/theme-chalk/index.min.css')
 
 import App from './App.vue'
 import {
