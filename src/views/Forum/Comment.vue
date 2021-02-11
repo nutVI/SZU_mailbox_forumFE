@@ -57,8 +57,7 @@
               </el-col>
             </el-row>
             <el-row>
-              <Reply :uuid="uuid" :limit="limit" :index="scope.$index" :commentObj="scope.row" :getReply="getReply"
-                :httpMethod="httpMethod" />
+              <Reply :uuid="uuid" :limit="limit" :index="scope.$index" :commentObj="scope.row" :getReply="getReply" />
             </el-row>
           </template>
         </el-table-column>
@@ -109,10 +108,11 @@
       }
     },
     mounted() {
-      debugger
       this.init().then(res => {
-        sessionStorage.setItem('uuid', JSON.parse(res).uuid)
+        sessionStorage.setItem('uuid', res.uuid)
         this.uuid = sessionStorage.getItem('uuid')
+      }).catch((e) => {
+        this.$message.error(e)
       })
       if (!api.getQueryVariable("id")) return
       else this.postId = api.getQueryVariable("id")
@@ -125,43 +125,16 @@
         xml.withCredentials = true
         xml.setRequestHeader('Authorization', api.getASPSESSION());
         xml.send();
-        return new Promise((resolve) => {
-          xml.onload = () => {
-            resolve(xml.responseText)
-          }
-        })
-      },
-      async httpMethod(method, url, data) {
-        url = 'https://127.0.0.1/' + url
-        const xml = new XMLHttpRequest();
-        xml.withCredentials = true
-        let str = '';
-        let isFirst = true;
-        for (const i in data) {
-          if (isFirst) {
-            isFirst = false;
-            str += i + '=' + data[i]
-          } else str += '&' + i + '=' + data[i]
-        }
-
-        if (method == 'GET' || method == 'DELETE') {
-          xml.open(method, url + '?' + str);
-          xml.send(null);
-        } else if (method == 'POST') {
-          xml.open(method, url);
-          xml.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
-          xml.send(str);
-        }
         return new Promise((resolve, reject) => {
           xml.onload = () => {
             if (xml.status == 200) resolve(JSON.parse(xml.responseText))
-            else reject(xml.responseText);
+            else reject(xml.responseText)
           }
         })
       },
       getComment() {
         this.loading = true;
-        this.httpMethod('GET', 'comment/', {
+        api.httpMethod('GET', 'comment/', {
           'postId': this.postId,
           'limit': this.limit,
           'offset': this.currentPage,
@@ -202,7 +175,7 @@
       },
       commentSubmit() {
         if (this.content.length >= 3) {
-          this.httpMethod('POST', 'comment/', {
+          api.httpMethod('POST', 'comment/', {
             'postId': this.postId,
             'content': this.content,
             'isAnonymous': this.isAnonymous ? 1 : 0,
@@ -242,7 +215,7 @@
           cancelButtonText: '取消',
           type: 'warning'
         }).then(() => {
-          this.httpMethod('DELETE', 'comment/', {
+          api.httpMethod('DELETE', 'comment/', {
             'id': id
           }).then((data) => {
             this.$message.success('删除成功')
@@ -255,7 +228,7 @@
       },
       getReply(index) {
         this.comment[index].reply.loading = true
-        this.httpMethod('GET', 'reply/', {
+        api.httpMethod('GET', 'reply/', {
           'commentId': this.comment[index].id,
           'limit': this.limit,
           'offset': this.comment[index].reply.currentPage,
@@ -302,12 +275,7 @@
     font-size: 14px;
   }
 
-  .buttonSelect span {
-    color: #fff;
-    font-family: 微软雅黑;
-    font-size: 14px;
-    line-height: 100%;
-  }
+
 
   .userName {
     margin: 7px 0 9px 0;

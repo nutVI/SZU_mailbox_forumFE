@@ -23,4 +23,40 @@
     font-size: 12px;
     line-height: 100%;
   }
+
+  .buttonSelect span {
+    color: #fff;
+    font-family: 微软雅黑;
+    font-size: 14px;
+    line-height: 100%;
+  }
+
+  .text-buttonSelect span {
+    color: #409eff;
+    font-family: 微软雅黑;
+    font-size: 14px;
+    line-height: 100%;
+  }
+
+  .text-dangerous-buttonSelect span {
+    color: #F56C6C;
+    font-family: 微软雅黑;
+    font-size: 14px;
+    line-height: 100%;
+  }
+
+  .text-buttonSelect:active span {
+    color: #006dda;
+  }
+
+  .text-dangerous-buttonSelect:active span {
+    color: #d33d3d;
+  }
+
+  .buttonSelect span {
+    color: #fff;
+    font-family: 微软雅黑;
+    font-size: 14px;
+    line-height: 100%;
+  }
 </style>

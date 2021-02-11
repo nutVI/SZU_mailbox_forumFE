@@ -21,17 +21,19 @@
                   {{ item.row.level + "层" }}
                 </div>
               </el-col>
-              <el-col :span="2">
-                <el-button v-if="uuid==item.row.uuid" style="padding: 0;" type="text"
-                  class="text-dangerous-buttonSelect" @click="deleteReply(item.row.id, item.$index)"> 删除
+              <el-col :span="1">
+                <el-button style="padding:0;margin-bottom:5px" type="text" class="text-dangerous-buttonSelect"
+                  @click="deleteReply(item.row.id, item.$index)"> 删除
                 </el-button>
               </el-col>
-              <el-col :span="4" style="font-family: Avenir, Helvetica, Arial, sans-serif;">
-                {{ item.row.time.substring(0, 10) }}
-                {{ item.row.time.substring(11, 16) }}
+              <el-col :span="5" style="font-family: Avenir, Helvetica, Arial, sans-serif;">
+                <div style="margin-left:10px">
+                  {{ item.row.time.substring(0, 10) }}
+                  {{ item.row.time.substring(11, 16) }}
+                </div>
               </el-col>
               <el-col :span="2">
-                <el-button style="padding: 0;" type="text" class="text-buttonSelect"
+                <el-button style="padding:0;margin-bottom:5px" type="text" class="text-buttonSelect"
                   @click="postReply(item.row.level,item.row.user,item.row.id)">回复
                 </el-button>
               </el-col>
@@ -85,7 +87,6 @@
       limit: Number,
       index: Number,
       commentObj: Object,
-      httpMethod: Function,
       getReply: Function
     },
     methods: {
@@ -99,7 +100,7 @@
       },
       replySubmit() {
         if (this.commentObj.reply.content.length >= 3) {
-          this.httpMethod('POST', 'reply/', {
+          api.httpMethod('POST', 'reply/', {
             'commentId': this.commentObj.reply.commentId,
             'content': this.commentObj.reply.content,
             'number': this.commentObj.reply.number,
@@ -132,7 +133,7 @@
           cancelButtonText: '取消',
           type: 'warning'
         }).then(() => {
-          this.httpMethod('DELETE', 'reply/', {
+          api.httpMethod('DELETE', 'reply/', {
             'id': id
           }).then((data) => {
             this.$message.success('删除成功')
@@ -155,34 +156,5 @@
     margin-top: 5px;
     width: 32px;
     height: 32px;
-  }
-
-  .text-buttonSelect span {
-    color: #409eff;
-    font-family: 微软雅黑;
-    font-size: 14px;
-    line-height: 100%;
-  }
-
-  .text-dangerous-buttonSelect span {
-    color: #F56C6C;
-    font-family: 微软雅黑;
-    font-size: 14px;
-    line-height: 100%;
-  }
-
-  .text-buttonSelect:active span {
-    color: #006dda;
-  }
-
-  .text-dangerous-buttonSelect:active span {
-    color: #d33d3d;
-  }
-
-  .buttonSelect span {
-    color: #fff;
-    font-family: 微软雅黑;
-    font-size: 14px;
-    line-height: 100%;
   }
 </style>
