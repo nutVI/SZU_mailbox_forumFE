@@ -232,18 +232,12 @@
       headerStyle({
         columnIndex
       }) {
-        if (columnIndex == 0) return 'background:#ebeef5;'
+        if (columnIndex == 0) return 'background:#ebeef5;font-size: 14px;'
       }
     }
   }
 </script>
 <style scoped>
-  .cell {
-    font-size: 14px;
-  }
-
-
-
   .userName {
     margin: 7px 0 9px 0;
   }
