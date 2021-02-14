@@ -18,6 +18,8 @@ export default {
     return Math.ceil(length / 664) * 23
   },
   getASPSESSION() {
+    if (process.env.VUE_APP_ENVIRONMENT === "development")
+      return "ASPSESSIONIDQCSDTSTA=LIIFIFGADHONCKDLNHAANEJE"
     let cookieStr = document.cookie.split('; ');
     let cookies = "null";
     let isFirst = true;

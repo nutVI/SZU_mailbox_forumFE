@@ -1,7 +1,8 @@
 import Vue from 'vue'
-loadStyle('https://unpkg.com/element-ui@2.15.0/lib/theme-chalk/index.css')
+loadStyle('https://cdn.bootcdn.net/ajax/libs/element-ui/2.15.0/theme-chalk/index.min.css')
 
 import App from './App.vue'
+import api from './function/utils'
 import {
   loadStyle
 } from './function'
@@ -18,6 +19,13 @@ if (process.env.VUE_APP_ENVIRONMENT === "development") {
   Vue.use(ElementUI)
 }
 
-new Vue({
-  render: h => h(App),
-}).$mount('#app')
+api.httpMethod("POST", "login/", {
+  'ASP': api.getASPSESSION()
+}).then(res => {
+  sessionStorage.setItem('uuid', res.uuid)
+  new Vue({
+    render: h => h(App),
+  }).$mount('#app')
+}).catch((e) => {
+  alert("ERROR: " + e)
+})
