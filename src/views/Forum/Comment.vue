@@ -6,11 +6,12 @@
         <el-table-column align="center" :label="'评论:' + total" width="96">
           <template slot-scope="scope">
             <el-col>
-              <el-image class="avatar" src="https://cube.elemecdn.com/9/c2/f0ee8a3c7c9638a54940382568c9dpng.png"
+              <el-image class="avatar"
+                :src="scope.row.creator.avatar||'https://cube.elemecdn.com/9/c2/f0ee8a3c7c9638a54940382568c9dpng.png'"
                 fit="cover" lazy>
               </el-image>
             </el-col>
-            <el-col class="userName">{{ scope.row.user }}</el-col>
+            <el-col class="userName">{{ scope.row.creator.user }}</el-col>
           </template>
         </el-table-column>
         <el-table-column label="content">
@@ -44,7 +45,7 @@
                 {{ scope.row.time.substring(11, 16) }}
               </el-col>
               <el-col :span="3">
-                <el-button class="buttonSelect" v-if="uuid==scope.row.uuid" size="mini"
+                <el-button class="buttonSelect" v-if="uuid==scope.row.creator.uuid" size="mini"
                   @click="deleteComment(scope.row.id, scope.$index)" type="danger">
                   删除
                 </el-button>
@@ -57,7 +58,7 @@
               </el-col>
             </el-row>
             <el-row>
-              <Reply :uuid="uuid" :limit="limit" :index="scope.$index" :commentObj="scope.row" :getReply="getReply" />
+              <Reply :uuid="uuid" :limit="limit" :commentObj="scope.row" />
             </el-row>
           </template>
         </el-table-column>
@@ -108,30 +109,12 @@
       }
     },
     mounted() {
-      this.init().then(res => {
-        sessionStorage.setItem('uuid', res.uuid)
-        this.uuid = sessionStorage.getItem('uuid')
-      }).catch((e) => {
-        this.$message.error(e)
-      })
+      this.uuid = sessionStorage.getItem('uuid')
       if (!api.getQueryVariable("id")) return
       else this.postId = api.getQueryVariable("id")
       this.getComment()
     },
     methods: {
-      async init() {
-        const xml = new XMLHttpRequest();
-        xml.open('GET', "https://127.0.0.1" + "/login/");
-        xml.withCredentials = true
-        xml.setRequestHeader('Authorization', api.getASPSESSION());
-        xml.send();
-        return new Promise((resolve, reject) => {
-          xml.onload = () => {
-            if (xml.status == 200) resolve(JSON.parse(xml.responseText))
-            else reject(xml.responseText)
-          }
-        })
-      },
       getComment() {
         this.loading = true;
         api.httpMethod('GET', 'comment/', {
@@ -155,8 +138,8 @@
             })
             const rArr = this.comment[i].replies.replies
             for (const j in rArr) {
-              let str = rArr[j].user + " :  "
-              str += (rArr[j].number ? ('@' + rArr[j].repliedUser + ' : ') : "") + rArr[j].content
+              let str = rArr[j].creator.user + " :  "
+              str += (rArr[j].replied ? ('@' + rArr[j].replied.user + ' : ') : "") + rArr[j].content
               this.$set(rArr[j], 'height', api.getLength(str))
             }
             this.comment[i].reply.showReply = this.comment[i].replies.total != 0
@@ -174,7 +157,7 @@
         })
       },
       commentSubmit() {
-        if (this.content.length >= 3) {
+        if (this.content.length >= 2) {
           api.httpMethod('POST', 'comment/', {
             'postId': this.postId,
             'content': this.content,
@@ -186,7 +169,6 @@
               this.currentPage = Math.ceil(this.total / 10)
               this.getComment()
             } else {
-              data['replies'] = {}
               this.$set(data, 'reply', {
                 'commentId': data.id,
                 'content': '',
@@ -224,28 +206,6 @@
           }).catch((e) => {
             this.$message.error(e)
           })
-        })
-      },
-      getReply(index) {
-        this.comment[index].reply.loading = true
-        api.httpMethod('GET', 'reply/', {
-          'commentId': this.comment[index].id,
-          'limit': this.limit,
-          'offset': this.comment[index].reply.currentPage,
-        }).then((data) => {
-          for (const i in data) {
-            if (i == 'replies') {
-              for (const j in data[i]) {
-                let str = data[i][j].user + " :  "
-                str += (data[i][j].number ? ('@' + data[i][j].repliedUser + ' : ') : "") + data[i][j].content
-                this.$set(data[i][j], 'height', api.getLength(str))
-              }
-            }
-            this.comment[index].replies[i] = data[i]
-          }
-          this.comment[index].reply.loading = false
-        }).catch((e) => {
-          this.$message.error(e)
         })
       },
       popReply(index) {

@@ -13,7 +13,7 @@
         <el-table-column label="content">
           <template slot-scope="item">
             <el-row :style="'height:'+ item.row.height +'px'">
-              {{ item.row.user + " :  "+ (item.row.number?('@' + item.row.repliedUser+' : '):"") + item.row.content}}
+              {{ item.row.creator.user + " :  "+ (item.row.replied ? ('@' + item.row.replied.user + ' : ') : "") + item.row.content}}
             </el-row>
             <el-row style="height:23px" type="flex" align="middle" justify="end">
               <el-col :span="16">
@@ -22,8 +22,8 @@
                 </div>
               </el-col>
               <el-col :span="1">
-                <el-button style="padding:0;margin-bottom:5px" type="text" class="text-dangerous-buttonSelect"
-                  @click="deleteReply(item.row.id, item.$index)"> 删除
+                <el-button v-if="uuid==item.row.creator.uuid" style="padding:0;margin-bottom:5px" type="text"
+                  class="text-dangerous-buttonSelect" @click="deleteReply(item.row.id, item.$index)"> 删除
                 </el-button>
               </el-col>
               <el-col :span="5" style="font-family: Avenir, Helvetica, Arial, sans-serif;">
@@ -34,7 +34,7 @@
               </el-col>
               <el-col :span="2">
                 <el-button style="padding:0;margin-bottom:5px" type="text" class="text-buttonSelect"
-                  @click="postReply(item.row.level,item.row.user,item.row.id)">回复
+                  @click="postReply(item.row.level,item.row.creator.user,item.row.id)">回复
                 </el-button>
               </el-col>
             </el-row>
@@ -45,13 +45,13 @@
         <el-col>
           <el-pagination v-if="commentObj.replies.total != 0" small layout="prev, pager, next"
             :total="commentObj.replies.total" :current-page.sync="commentObj.reply.currentPage" :page-size="limit"
-            @current-change="getReply(index)">
+            @current-change="getReply()">
           </el-pagination>
         </el-col>
         <el-col :span="3">
           <el-button style="padding: 0;" type="text" class="text-buttonSelect"
-            @click="postReply(0,commentObj.user,commentObj.id)">
-            回复一下
+            @click="postReply(0,commentObj.creator.user,commentObj.id)">
+            回复楼主
           </el-button>
         </el-col>
       </el-row>
@@ -85,11 +85,31 @@
     props: {
       uuid: String,
       limit: Number,
-      index: Number,
-      commentObj: Object,
-      getReply: Function
+      commentObj: Object
     },
     methods: {
+      getReply() {
+        this.commentObj.reply.loading = true
+        api.httpMethod('GET', 'reply/', {
+          'commentId': this.commentObj.id,
+          'limit': this.limit,
+          'offset': this.commentObj.reply.currentPage,
+        }).then((data) => {
+          for (const i in data) {
+            if (i == 'replies') {
+              for (const j in data[i]) {
+                let str = data[i][j].creator.user + " :  "
+                str += (data[i][j].replied ? ('@' + data[i][j].replied.user + ' : ') : "") + data[i][j].content
+                this.$set(data[i][j], 'height', api.getLength(str))
+              }
+            }
+            this.commentObj.replies[i] = data[i]
+          }
+          this.commentObj.reply.loading = false
+        }).catch((e) => {
+          this.$message.error(e)
+        })
+      },
       postReply(level, repliedUser, repliedId) {
         if (this.commentObj.reply.showInput && level == this.commentObj.reply.number)
           this.commentObj.reply.showInput = false
@@ -99,22 +119,22 @@
         this.commentObj.reply.repliedId = repliedId
       },
       replySubmit() {
-        if (this.commentObj.reply.content.length >= 3) {
-          api.httpMethod('POST', 'reply/', {
-            'commentId': this.commentObj.reply.commentId,
+        if (this.commentObj.reply.content.length >= 2) {
+          let postData = {
             'content': this.commentObj.reply.content,
-            'number': this.commentObj.reply.number,
-            'repliedId': this.commentObj.reply.repliedId,
             'isAnonymous': this.commentObj.reply.isAnonymous ? 1 : 0,
-          }).then((data) => {
+          }
+          if (this.commentObj.reply.number == 0) postData['commentId'] = this.commentObj.reply.commentId
+          else postData['repliedId'] = this.commentObj.reply.repliedId
+          api.httpMethod('POST', 'reply/', postData).then((data) => {
             this.$message.success('回复成功')
             this.commentObj.replies.total++;
             if (Math.ceil((this.commentObj.replies.total) / 10) > this.commentObj.reply.currentPage) {
               this.commentObj.reply.currentPage = Math.ceil(this.commentObj.replies.total / 10)
-              this.getReply(this.index)
+              this.getReply()
             } else {
-              let str = data.user + " :  "
-              str += (data.number ? ('@' + data.repliedUser + ' : ') : "") + data.content
+              let str = data.creator.user + " :  "
+              str += (data.replied ? ('@' + data.replied.user + ' : ') : "") + data.content
               this.$set(data, 'height', api.getLength(str))
               this.commentObj.replies.replies.push(data)
             }
