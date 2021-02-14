@@ -109,10 +109,17 @@
       }
     },
     mounted() {
-      this.uuid = sessionStorage.getItem('uuid')
       if (!api.getQueryVariable("id")) return
       else this.postId = api.getQueryVariable("id")
-      this.getComment()
+      api.httpMethod("POST", "login/", {
+        'ASP': api.getASPSESSION()
+      }).then(res => {
+        sessionStorage.setItem('uuid', res.uuid)
+        this.uuid = sessionStorage.getItem('uuid')
+        this.getComment()
+      }).catch((e) => {
+        this.$message.error(e)
+      })
     },
     methods: {
       getComment() {

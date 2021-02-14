@@ -19,13 +19,6 @@ if (process.env.VUE_APP_ENVIRONMENT === "development") {
   Vue.use(ElementUI)
 }
 
-api.httpMethod("POST", "login/", {
-  'ASP': api.getASPSESSION()
-}).then(res => {
-  sessionStorage.setItem('uuid', res.uuid)
-  new Vue({
-    render: h => h(App),
-  }).$mount('#app')
-}).catch((e) => {
-  alert("ERROR: " + e)
-})
+new Vue({
+  render: h => h(App),
+}).$mount('#app')
