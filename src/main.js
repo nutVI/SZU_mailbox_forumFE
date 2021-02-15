@@ -1,8 +1,7 @@
 import Vue from 'vue'
-loadStyle('https://cdn.bootcdn.net/ajax/libs/element-ui/2.15.0/theme-chalk/index.min.css')
+loadStyle('https://cdn.jsdelivr.net/gh/nutVI/SZU_mailbox_forumFE/js_modules/element-ui-2.15.0/index.min.css')
 
 import App from './App.vue'
-import api from './function/utils'
 import {
   loadStyle
 } from './function'
@@ -12,7 +11,6 @@ let father = document.getElementById('testVueToTamper') ||
 let divApp = document.createElement('div')
 divApp.id = 'app'
 father.append(divApp)
-
 
 if (process.env.VUE_APP_ENVIRONMENT === "development") {
   const ElementUI = require('element-ui')
