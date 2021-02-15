@@ -22,7 +22,7 @@
                 </div>
               </el-col>
               <el-col :span="1">
-                <el-button v-if="uuid==item.row.creator.uuid" style="padding:0;margin-bottom:5px" type="text"
+                <el-button v-if="uuid==item.row.creator.uuid" style="padding:0;margin-bottom:2px" type="text"
                   class="text-dangerous-buttonSelect" @click="deleteReply(item.row.id, item.$index)"> 删除
                 </el-button>
               </el-col>
@@ -33,7 +33,7 @@
                 </div>
               </el-col>
               <el-col :span="2">
-                <el-button style="padding:0;margin-bottom:5px" type="text" class="text-buttonSelect"
+                <el-button style="padding:0;margin-bottom:2px" type="text" class="text-buttonSelect"
                   @click="postReply(item.row.level,item.row.creator.user,item.row.id)">回复
                 </el-button>
               </el-col>
