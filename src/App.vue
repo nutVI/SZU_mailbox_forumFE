@@ -3,17 +3,20 @@
     <Comment />
     <div id='textLength' style='font-family:Microsoft Yahei; white-space: normal;
          position:fixed;z-index:-1;bottom:0;opacity:0;height:0;font-size:14px'></div>
+    <SideBar />
   </div>
 </template>
 
 <script>
   import Comment from './views/Forum/Comment.vue'
+  import SideBar from './views/layout/SideBar.vue'
   import api from './function/utils'
 
   export default {
     name: 'App',
     components: {
-      Comment
+      Comment,
+      SideBar
     },
     beforeMount() {
       let linkElm = document.createElement("link")
