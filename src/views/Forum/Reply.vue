@@ -28,7 +28,7 @@
               </el-col>
               <el-col :span="1">
                 <el-row type="flex" justify="center" align="middle">
-                  <el-button v-if="uuid==item.row.creator.uuid" style="padding:0;margin-bottom:2px" type="text"
+                  <el-button v-if="$root.UUID==item.row.creator.uuid" style="padding:0;margin-bottom:2px" type="text"
                     class="text-dangerous-buttonSelect" @click="deleteReply(item.row.id, item.$index)"> 删除
                   </el-button>
                   <el-button v-else size="mini" type="text" style="padding:0;margin-bottom:2px;" disabled>
@@ -94,9 +94,13 @@
 
   export default {
     props: {
-      uuid: String,
       limit: Number,
       commentObj: Object
+    },
+    mounted() {
+      let idTime = setInterval(() => {
+        if (this.$root.UUID != -1) clearInterval(idTime)
+      }, 250)
     },
     methods: {
       getReply() {

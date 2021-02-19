@@ -1,6 +1,6 @@
 <template>
   <div style="width:960px;margin: 0 auto">
-    <Comment />
+    <Comment v-if="showURL==1" />
     <div id='textLength' style='font-family:Microsoft Yahei; white-space: normal;
          position:fixed;z-index:-1;bottom:0;opacity:0;height:0;font-size:14px'></div>
     <SideBar />
@@ -18,6 +18,11 @@
       Comment,
       SideBar
     },
+    data() {
+      return {
+        showURL: 0
+      }
+    },
     beforeMount() {
       let linkElm = document.createElement("link")
       linkElm.setAttribute('rel', 'stylesheet');
@@ -31,15 +36,25 @@
       a && (a.onclick = () => {
         api.httpMethod("GET", "logout/", {})
       })
+
+      api.httpMethod("POST", "login/", {
+        'ASP': api.getASPSESSION()
+      }).then(res => {
+        this.$root.UUID = res.uuid
+      }).catch((e) => {
+        this.$root.UUID = 0
+        this.$message.error(e)
+      })
+
+      if (api.getQueryVariable("id")) {
+        document.body.style.overflowY = "scroll"
+        this.showURL = 1
+      }
     },
   }
 </script>
 
 <style>
-  body {
-    overflow-y: scroll;
-  }
-
   .el-message-box__btns span {
     color: #000000;
     font-size: 12px;

@@ -46,7 +46,7 @@
               </el-col>
               <el-col :span="4">
                 <el-row type="flex" justify="center" align="middle">
-                  <el-button class="buttonSelect" v-if="uuid==scope.row.creator.uuid" size="mini"
+                  <el-button class="buttonSelect" v-if="$root.UUID==scope.row.creator.uuid" size="mini"
                     @click="deleteComment(scope.row.id, scope.$index)" type="danger">
                     删除
                   </el-button>
@@ -65,7 +65,7 @@
               </el-col>
             </el-row>
             <el-row>
-              <Reply :uuid="uuid" :limit="limit" :commentObj="scope.row" />
+              <Reply :limit="limit" :commentObj="scope.row" />
             </el-row>
           </template>
         </el-table-column>
@@ -109,24 +109,19 @@
 
         comment: [],
         sort: "id",
-        uuid: '1',
         input: '',
         content: '',
         isAnonymous: 0,
       }
     },
     mounted() {
-      if (!api.getQueryVariable("id")) return
-      else this.postId = api.getQueryVariable("id")
-      api.httpMethod("POST", "login/", {
-        'ASP': api.getASPSESSION()
-      }).then(res => {
-        sessionStorage.setItem('uuid', res.uuid)
-        this.uuid = sessionStorage.getItem('uuid')
-        this.getComment()
-      }).catch((e) => {
-        this.$message.error(e)
-      })
+      this.postId = api.getQueryVariable("id")
+      let idTime = setInterval(() => {
+        if (this.$root.UUID != -1) {
+          clearInterval(idTime)
+          this.getComment()
+        }
+      }, 250)
     },
     methods: {
       getComment() {

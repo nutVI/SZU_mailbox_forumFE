@@ -5,6 +5,7 @@
 // @description  在深圳大学校务信箱中添加了评论和回复的功能
 // @author       nut
 // @match        https://www1.szu.edu.cn/mailbox/view.asp*
+// @match        https://www1.szu.edu.cn/mailbox/list.asp*
 // @match        https://www1.szu.edu.cn/
 // @match        https://www1.szu.edu.cn/mailbox/
 // @grant        unsafeWindow

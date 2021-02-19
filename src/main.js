@@ -20,6 +20,12 @@ if (process.env.VUE_APP_ENVIRONMENT === "development") {
   Vue.use(ElementUI)
 }
 
+
 new Vue({
   render: h => h(App),
+  data() {
+    return {
+      UUID: -1
+    }
+  }
 }).$mount('#app')
