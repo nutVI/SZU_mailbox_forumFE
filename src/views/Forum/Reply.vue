@@ -4,8 +4,9 @@
       <el-table :data="commentObj.replies.replies" :show-header="false" :cell-style="replycolumnStyle"
         v-loading="commentObj.reply.loading">
         <el-table-column align="center" width="52" label="head">
-          <template>
-            <el-image class="avatar" src="https://cube.elemecdn.com/9/c2/f0ee8a3c7c9638a54940382568c9dpng.png"
+          <template slot-scope="item">
+            <el-image class="avatar"
+              :src="item.row.creator.avatar||'https://cube.elemecdn.com/9/c2/f0ee8a3c7c9638a54940382568c9dpng.png'"
               fit="cover" lazy>
             </el-image>
           </template>
@@ -13,7 +14,11 @@
         <el-table-column label="content">
           <template slot-scope="item">
             <el-row :style="'height:'+ item.row.height +'px'">
-              {{ item.row.creator.user + " :  "+ (item.row.replied ? ('@' + item.row.replied.user + ' : ') : "") + item.row.content}}
+              <font style="color:#0b66c0;">{{item.row.creator.user}}</font>{{": "}}
+              <font v-if="item.row.replied">
+                @<font style="color:#0b66c0;">{{item.row.replied.user}}</font>{{': '}}
+              </font>
+              {{item.row.content}}
             </el-row>
             <el-row style="height:23px" type="flex" align="middle" justify="end">
               <el-col :span="16">
@@ -22,9 +27,15 @@
                 </div>
               </el-col>
               <el-col :span="1">
-                <el-button v-if="uuid==item.row.creator.uuid" style="padding:0;margin-bottom:2px" type="text"
-                  class="text-dangerous-buttonSelect" @click="deleteReply(item.row.id, item.$index)"> 删除
-                </el-button>
+                <el-row type="flex" justify="center" align="middle">
+                  <el-button v-if="uuid==item.row.creator.uuid" style="padding:0;margin-bottom:2px" type="text"
+                    class="text-dangerous-buttonSelect" @click="deleteReply(item.row.id, item.$index)"> 删除
+                  </el-button>
+                  <el-button v-else size="mini" type="text" style="padding:0;margin-bottom:2px;" disabled>
+                    <i style="font-size:16px" class="iconfont icon0_like2" />
+                    <font style="font-size:14px">1</font>
+                  </el-button>
+                </el-row>
               </el-col>
               <el-col :span="5" style="font-family: Avenir, Helvetica, Arial, sans-serif;">
                 <div style="margin-left:10px">
@@ -144,7 +155,7 @@
             this.$message.error(e)
           })
         } else {
-          this.$message.error("字数少于3")
+          this.$message.error("字数少于2")
         }
       },
       deleteReply(id, index) {

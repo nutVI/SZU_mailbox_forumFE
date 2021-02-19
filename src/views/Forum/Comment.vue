@@ -11,7 +11,7 @@
                 fit="cover" lazy>
               </el-image>
             </el-col>
-            <el-col class="userName">{{ scope.row.creator.user }}</el-col>
+            <el-col class="userName">{{scope.row.creator.user }}</el-col>
           </template>
         </el-table-column>
         <el-table-column label="content">
@@ -44,11 +44,18 @@
                 {{ scope.row.time.substring(0, 10) }}
                 {{ scope.row.time.substring(11, 16) }}
               </el-col>
-              <el-col :span="3">
-                <el-button class="buttonSelect" v-if="uuid==scope.row.creator.uuid" size="mini"
-                  @click="deleteComment(scope.row.id, scope.$index)" type="danger">
-                  删除
-                </el-button>
+              <el-col :span="4">
+                <el-row type="flex" justify="center" align="middle">
+                  <el-button class="buttonSelect" v-if="uuid==scope.row.creator.uuid" size="mini"
+                    @click="deleteComment(scope.row.id, scope.$index)" type="danger">
+                    删除
+                  </el-button>
+                  <el-button v-else size="mini" type="text" style="padding:0;" disabled>
+                    <i style="font-size:24px" class="iconfont icon0_like1" />
+                    <font style="font-size:14px">1</font>
+                    <!-- icon0_like2 -->
+                  </el-button>
+                </el-row>
               </el-col>
               <el-col :span="3">
                 <el-badge :value="scope.row.replies.total" type="primary">
@@ -195,7 +202,7 @@
             this.$message.error(e)
           })
         } else {
-          this.$message.error("字数少于3")
+          this.$message.error("字数少于2")
         }
       },
       deleteComment(id, index) {
@@ -239,6 +246,11 @@
 </script>
 <style scoped>
   .userName {
+    position: relative;
+    right: 4px;
+    width: 84px;
+    font-size: 12px;
+    color: #0b66c0;
     margin: 7px 0 9px 0;
   }
 
