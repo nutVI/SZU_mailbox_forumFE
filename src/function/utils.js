@@ -1,4 +1,12 @@
 export default {
+  loadStyle(url) {
+    const link = document.createElement('link');
+    link.rel = 'stylesheet';
+    link.type = 'text/css';
+    link.href = url;
+    link.media = 'all';
+    document.documentElement.appendChild(link);
+  },
   getQueryVariable(variable) {
     const query = window.location.search.substring(1);
     const vars = query.split("&");
@@ -19,7 +27,7 @@ export default {
   },
   getASPSESSION() {
     if (process.env.VUE_APP_ENVIRONMENT === "development")
-      return "ASPSESSIONIDQCSDTSTA=LIIFIFGADHONCKDLNHAANEJE"
+      return "ASPSESSIONIDSCRDTSTB=GPHJCFJDFFNKIKFIIOIBKCBO"
     let cookieStr = document.cookie.split('; ');
     let cookies = "null";
     let isFirst = true;
@@ -29,7 +37,7 @@ export default {
           cookies = cookieStr[i];
           isFirst = false;
         } else {
-          cookies += '; ' + cookieStr[i];
+          cookies += '---' + cookieStr[i];
         }
       }
     }
