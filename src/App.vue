@@ -1,9 +1,9 @@
 <template>
   <div style="width:960px;margin: 0 auto">
+    <SideBar />
     <Comment v-if="showURL==1" />
     <div id='textLength' style='font-family:Microsoft Yahei; white-space: normal;
          position:fixed;z-index:-1;bottom:0;opacity:0;height:0;font-size:14px'></div>
-    <SideBar />
   </div>
 </template>
 
