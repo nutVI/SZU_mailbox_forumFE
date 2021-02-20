@@ -1,72 +1,106 @@
 <template>
-  <div class="sidebar">
-    <el-radio-group v-model="isCollapse" style="margin-bottom: 20px;">
-      <el-radio-button :label="false">展开</el-radio-button>
-      <el-radio-button :label="true">收起</el-radio-button>
-    </el-radio-group>
-    <el-menu default-active="1-4-1" class="el-menu-vertical-demo" @open="handleOpen" @close="handleClose"
-      :collapse="isCollapse">
-      <el-submenu index="1">
-        <template slot="title">
-          <i class="el-icon-location"></i>
-          <span slot="title">导航一</span>
-        </template>
-        <el-menu-item-group>
-          <span slot="title">分组一</span>
-          <el-menu-item index="1-1">选项1</el-menu-item>
-          <el-menu-item index="1-2">选项2</el-menu-item>
-        </el-menu-item-group>
-        <el-menu-item-group title="分组2">
-          <el-menu-item index="1-3">选项3</el-menu-item>
-        </el-menu-item-group>
-        <el-submenu index="1-4">
-          <span slot="title">选项4</span>
-          <el-menu-item index="1-4-1">选项1</el-menu-item>
-        </el-submenu>
-      </el-submenu>
-      <el-menu-item index="2">
-        <i class="el-icon-menu"></i>
-        <span slot="title">导航二</span>
-      </el-menu-item>
-      <el-menu-item index="3" disabled>
-        <i class="el-icon-document"></i>
-        <span slot="title">导航三</span>
-      </el-menu-item>
-      <el-menu-item index="4">
-        <i class="el-icon-setting"></i>
-        <span slot="title">导航四</span>
-      </el-menu-item>
-    </el-menu>
+  <div>
+    <div class="sidebar" align="left">
+      <el-menu :default-active="active" class="el-menu-vertical-demo" @select="selectIcon" :collapse="true">
+        <el-menu-item index="1">
+          <el-image style="width: 24px; height: 24px; top:16px"
+            :src="$root.AVATAR||'https://cube.elemecdn.com/9/c2/f0ee8a3c7c9638a54940382568c9dpng.png'">
+          </el-image>
+          <span slot="title">个人信息</span>
+        </el-menu-item>
+        <el-menu-item index="2">
+          <i class="el-icon-menu" style="position: relative; top:16px"></i>
+          <span slot="title">修改昵称</span>
+        </el-menu-item>
+        <el-menu-item index="3">
+          <i class="el-icon-document" style="position: relative;top:16px"></i>
+          <span slot="title">修改头像</span>
+        </el-menu-item>
+        <el-menu-item index="4" disabled>
+          <i class="el-icon-setting" style="position: relative;top:16px"></i>
+          <span slot="title">提交反馈</span>
+        </el-menu-item>
+      </el-menu>
+    </div>
+    <el-dialog title="提示" :visible.sync="dialogVisible" width="30%" :before-close="handleClose">
+      <span>这是一段信息</span>
+      <span slot="footer" class="dialog-footer">
+        <el-button @click="dialogVisible = false">取 消</el-button>
+        <el-button type="primary" @click="dialogVisible = false">确 定</el-button>
+      </span>
+    </el-dialog>
   </div>
 </template>
 
 <script>
+  import api from '../../function/utils'
   export default {
     data() {
       return {
-        isCollapse: true
+        active: '1',
+        dialogVisible: false
       };
     },
     methods: {
-      handleOpen(key, keyPath) {
-        console.log(key, keyPath);
+      handleClose(done) {
+        this.$confirm('确认关闭？')
+          .then(_ => {
+            done();
+          })
+          .catch(_ => {});
       },
-      handleClose(key, keyPath) {
-        console.log(key, keyPath);
+      selectIcon(index) {
+        this.active = index
+        if (index == 2) this.setNickname()
+        else if (index == 3) this.dialogVisible = true
+      },
+      setNickname() {
+        this.$prompt('请输入要修改的昵称', '注意长度', {
+          distinguishCancelAndClose: true,
+          confirmButtonText: '确定修改',
+          cancelButtonText: '清空已存在昵称',
+          inputValidator: (value) => {
+            if (value.length > 12) return false
+            return true
+          },
+          inputErrorMessage: '长度过长'
+        }).then(({
+          value
+        }) => {
+          api.httpMethod("POST", "setnickname/", {
+            'nickname': value
+          }).then((data) => {
+            this.$message({
+              type: 'success',
+              message: '修改成功 ' + data.nickname
+            });
+          }).catch((e) => {
+            this.$message.error(e)
+          })
+        }).catch((action) => {
+          if (action === 'cancel')
+            api.httpMethod("POST", "setnickname/", {
+              'empty': 'empty'
+            }).then((data) => {
+              this.$message({
+                type: 'success',
+                message: '清空昵称成功'
+              });
+            })
+        });
       }
     }
   }
 </script>
 
 <style scoped>
-  .el-menu-vertical-demo:not(.el-menu--collapse) {
-    width: 200px;
-    min-height: 224px;
-  }
-
   .sidebar {
-    top: 0;
+    top: 108px;
     left: 0;
     position: fixed;
+  }
+
+  .sidebar>>>.el-tooltip {
+    line-height: 24px;
   }
 </style>

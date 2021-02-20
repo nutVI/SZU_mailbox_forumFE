@@ -1,5 +1,3 @@
-document.querySelector("body").style.paddingRight = "0"
-
 import api from './function/utils'
 api.loadStyle('https://cdn.jsdelivr.net/gh/nutVI/SZU_mailbox_forumFE/js_modules/element-ui-2.15.0/index.min.css')
 
@@ -25,7 +23,8 @@ new Vue({
   render: h => h(App),
   data() {
     return {
-      UUID: -1
+      UUID: -1,
+      AVATAR: null
     }
   }
 }).$mount('#app')

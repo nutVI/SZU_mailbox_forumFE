@@ -40,6 +40,7 @@
       api.httpMethod("POST", "login/", {
         'ASP': api.getASPSESSION()
       }).then(res => {
+        this.$root.AVATAR = res.avatar
         this.$root.UUID = res.uuid
       }).catch((e) => {
         this.$root.UUID = 0
@@ -47,7 +48,6 @@
       })
 
       if (api.getQueryVariable("id")) {
-        document.body.style.overflowY = "scroll"
         this.showURL = 1
       }
     },
@@ -55,6 +55,16 @@
 </script>
 
 <style>
+  body {
+    overflow-y: scroll;
+  }
+
+  .el-tooltip__popper span {
+    color: #ffffff;
+    font-size: 12px;
+    line-height: 100%;
+  }
+
   .el-message-box__btns span {
     color: #000000;
     font-size: 12px;
