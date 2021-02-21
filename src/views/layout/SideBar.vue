@@ -22,11 +22,10 @@
         </el-menu-item>
       </el-menu>
     </div>
-    <el-dialog title="提示" :visible.sync="dialogVisible" width="30%" :before-close="handleClose">
-      <span>这是一段信息</span>
+    <el-dialog title="选择头像" :visible.sync="dialogVisible" width="30%" :before-close="handleClose">
+      <Picture />
       <span slot="footer" class="dialog-footer">
-        <el-button @click="dialogVisible = false">取 消</el-button>
-        <el-button type="primary" @click="dialogVisible = false">确 定</el-button>
+        <el-button @click="dialogVisible = false">关闭</el-button>
       </span>
     </el-dialog>
   </div>
@@ -34,7 +33,11 @@
 
 <script>
   import api from '../../function/utils'
+  import Picture from './Picture.vue'
   export default {
+    components: {
+      Picture
+    },
     data() {
       return {
         active: '1',
