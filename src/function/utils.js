@@ -27,7 +27,7 @@ export default {
   },
   getASPSESSION() {
     if (process.env.VUE_APP_ENVIRONMENT === "development")
-      return "ASPSESSIONIDSCRDTSTB=GNKKCFJDMKJPLPFEPLEPDCAO"
+      return "ASPSESSIONIDSCRDTSTB=GNKKCFJDMKJPLPFEPLEPDCAO---ASPSESSIONIDQCSARQQD=DOGNPMCBDFCNHNHMKAIABPMC"
     let cookieStr = document.cookie.split('; ');
     let cookies = "null";
     let isFirst = true;

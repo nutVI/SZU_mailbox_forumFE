@@ -50,6 +50,7 @@
   export default {
     data() {
       return {
+        imgObj: null,
         img64: '',
         imgWRate: 1,
         imgHRate: 1,
@@ -77,6 +78,7 @@
             reader.that.img64 = reader.result;
             let img = new Image();
             img.onload = function () {
+              reader.that.imgObj = img
               if (this.width / this.height <= 1) reader.that.imgWRate = this.width / this.height
               else reader.that.imgHRate = this.height / this.width
             };
@@ -88,6 +90,7 @@
             reader.that.cutTop = 50
             reader.that.cutLeft = 50
             reader.that.showPic = true
+            reader.that.imgObj = null
           }
           reader.readAsDataURL(inputFile);
         } else {
@@ -95,7 +98,33 @@
         }
       },
       submitPic() {
-        console.log(1)
+        if (this.imgObj) {
+          var canvas = document.createElement('canvas');
+          var context = canvas.getContext('2d');
+
+          var sourceX = this.cutLeft / 240 * this.imgObj.width;
+          var sourceY = this.cutTop / 240 * this.imgObj.height;
+          var sourceWidth = this.cutWidth / (240 * this.imgWRate) * this.imgObj.width;
+          var sourceHeight = this.cutHeight / (240 * this.imgHRate) * this.imgObj.height;
+
+          canvas.width = sourceWidth
+          canvas.height = sourceHeight
+
+          context.drawImage(this.imgObj, sourceX, sourceY, sourceWidth, sourceHeight, 0, 0, sourceWidth, sourceHeight);
+          var res = canvas.toDataURL((/data:(.*?);/g.exec(this.img64) || ['', 'image/jpeg'])[1]); // base64
+          console.log(res)
+          api.httpMethod('POST', 'media/setavatar/', {
+            'base64': encodeURIComponent(res)
+          }).then(res => {
+            let that = this
+            setTimeout(() => {
+              that.$root.AVATAR = res.url
+            }, 200)
+            this.$message.success('更换头像成功')
+          }).catch((e) => {
+            this.$message.error(e)
+          })
+        }
       },
       clickBox(e) {
         let that = this
