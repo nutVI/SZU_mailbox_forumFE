@@ -9,20 +9,20 @@
           <span slot="title">个人信息</span>
         </el-menu-item>
         <el-menu-item index="2">
-          <i class="el-icon-menu" style="position: relative; top:16px"></i>
+          <i class="el-icon-edit-outline" style="position: relative; top:16px"></i>
           <span slot="title">修改昵称</span>
         </el-menu-item>
         <el-menu-item index="3">
-          <i class="el-icon-document" style="position: relative;top:16px"></i>
+          <i class="el-icon-picture-outline" style="position: relative;top:16px"></i>
           <span slot="title">修改头像</span>
         </el-menu-item>
-        <el-menu-item index="4" disabled>
-          <i class="el-icon-setting" style="position: relative;top:16px"></i>
+        <el-menu-item index="4">
+          <i class="el-icon-warning-outline" style="position: relative;top:16px"></i>
           <span slot="title">提交反馈</span>
         </el-menu-item>
       </el-menu>
     </div>
-    <el-dialog align="left" title="选择头像" :visible.sync="dialogVisible" width="30%" :close-on-click-modal='false'>
+    <el-dialog align="left" title="选择头像(不要涩图)" :visible.sync="dialogVisible" width="30%" :close-on-click-modal='false'>
       <Picture />
       <span slot="footer" class="dialog-footer">
         <el-button @click="dialogVisible = false">关闭</el-button>
@@ -49,6 +49,7 @@
         this.active = index
         if (index == 2) this.setNickname()
         else if (index == 3) this.dialogVisible = true
+        else if (index == 4) this.debug()
       },
       setNickname() {
         this.$prompt('请输入要修改的昵称', '注意长度', {
@@ -84,6 +85,17 @@
                 message: '清空昵称成功'
               });
             })
+        });
+      },
+      debug() {
+        this.$alert('发送到邮箱1972404126@qq.com', '问题反馈', {
+          confirmButtonText: '确定',
+          callback: action => {
+            this.$message({
+              type: 'info',
+              message: `action: ${ action }`
+            });
+          }
         });
       }
     }

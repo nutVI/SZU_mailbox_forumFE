@@ -1,5 +1,5 @@
 import api from './function/utils'
-api.loadStyle('https://cdn.jsdelivr.net/gh/nutVI/SZU_mailbox_forumFE/js_modules/element-ui-2.15.0/index.min.css')
+api.loadStyle('https://cdn.jsdelivr.net/npm/element-ui@2.15.0/lib/theme-chalk/index.min.css')
 
 var oMeta = document.createElement('meta');
 oMeta.content = 'no-referrer';

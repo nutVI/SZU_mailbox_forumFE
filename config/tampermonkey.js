@@ -9,7 +9,7 @@
 // @match        https://www1.szu.edu.cn/
 // @match        https://www1.szu.edu.cn/mailbox/
 // @grant        unsafeWindow
-// @require      https://cdn.jsdelivr.net/gh/nutVI/SZU_mailbox_forumFE/js_modules/vue-2.6.11/vue.min.js
-// @require      https://cdn.jsdelivr.net/gh/nutVI/SZU_mailbox_forumFE/js_modules/element-ui-2.15.0/index.min.js
+// @require      https://cdn.jsdelivr.net/npm/vue@2.6.11/dist/vue.min.js
+// @require      https://cdn.jsdelivr.net/npm/element-ui@2.15.0/lib/index.js
 // @run-at       document-start
 // ==/UserScript==
