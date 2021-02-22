@@ -23,12 +23,13 @@
           <i style="font-size:28px" class="el-icon-plus"></i>
         </div>
         <el-row>
-          <el-button v-if="showPic" @click="inputFile">重新选择</el-button>
+          <el-button style="margin:5px 30%" class="buttonSelect" size="small" type="primary" v-if="showPic"
+            @click="inputFile">重新选择</el-button>
         </el-row>
         <input ref="file_input" type="file" name="image" accept="image/png,image/jpg,image/jpeg" style="display:none;"
           @change="getFile">
       </el-col>
-      <el-col :span="12">
+      <el-col type="flex" justify="center" align="middle" :span="12">
         <el-row>头像预览</el-row>
         <el-row>
           <div class="picView">
@@ -38,7 +39,7 @@
           </div>
         </el-row>
         <el-row>
-          <el-button @click="submitPic">提交</el-button>
+          <el-button class="buttonSelect" size="small" type="primary" @click="submitPic">提交</el-button>
         </el-row>
       </el-col>
     </el-row>

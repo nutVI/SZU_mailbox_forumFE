@@ -1,6 +1,8 @@
 <template>
   <div style="width:960px;margin: 0 auto">
-    <SideBar />
+    <transition name="navfade">
+      <SideBar v-show="navOut" />
+    </transition>
     <Comment v-if="showURL==1" />
     <div id='textLength' style='font-family:Microsoft Yahei; white-space: normal;
          position:fixed;z-index:-1;bottom:0;opacity:0;height:0;font-size:14px'></div>
@@ -20,10 +22,14 @@
     },
     data() {
       return {
-        showURL: 0
+        showURL: 0,
+        navOut: false
       }
     },
     beforeMount() {
+      setTimeout(() => {
+        this.navOut = true
+      }, 0)
       let linkElm = document.createElement("link")
       linkElm.setAttribute('rel', 'stylesheet');
       linkElm.setAttribute("type", "text/css")
@@ -100,10 +106,13 @@
     color: #d33d3d;
   }
 
-  .buttonSelect span {
-    color: #fff;
-    font-family: 微软雅黑;
-    font-size: 14px;
-    line-height: 100%;
+  .navfade-enter-active,
+  .navfade-leave-active {
+    transition: opacity .8s;
+  }
+
+  .navfade-enter,
+  .navfade-leave-to {
+    opacity: 0;
   }
 </style>

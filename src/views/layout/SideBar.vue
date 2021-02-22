@@ -1,6 +1,6 @@
 <template>
   <div>
-    <div class="sidebar" align="left">
+    <div class="sidebar">
       <el-menu :default-active="active" class="el-menu-vertical-demo" @select="selectIcon" :collapse="true">
         <el-menu-item index="1">
           <el-image style="width: 24px; height: 24px; top:16px"
@@ -22,7 +22,7 @@
         </el-menu-item>
       </el-menu>
     </div>
-    <el-dialog title="选择头像" :visible.sync="dialogVisible" width="30%" :before-close="handleClose">
+    <el-dialog align="left" title="选择头像" :visible.sync="dialogVisible" width="30%" :close-on-click-modal='false'>
       <Picture />
       <span slot="footer" class="dialog-footer">
         <el-button @click="dialogVisible = false">关闭</el-button>
@@ -45,13 +45,6 @@
       };
     },
     methods: {
-      handleClose(done) {
-        this.$confirm('确认关闭？')
-          .then(_ => {
-            done();
-          })
-          .catch(_ => {});
-      },
       selectIcon(index) {
         this.active = index
         if (index == 2) this.setNickname()
@@ -59,6 +52,7 @@
       },
       setNickname() {
         this.$prompt('请输入要修改的昵称', '注意长度', {
+          closeOnClickModal: false,
           distinguishCancelAndClose: true,
           confirmButtonText: '确定修改',
           cancelButtonText: '清空已存在昵称',
@@ -98,7 +92,7 @@
 
 <style scoped>
   .sidebar {
-    top: 108px;
+    top: 225px;
     left: 0;
     position: fixed;
   }
