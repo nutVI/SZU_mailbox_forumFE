@@ -89,13 +89,7 @@
       },
       debug() {
         this.$alert('发送到邮箱1972404126@qq.com', '问题反馈', {
-          confirmButtonText: '确定',
-          callback: action => {
-            this.$message({
-              type: 'info',
-              message: `action: ${ action }`
-            });
-          }
+          confirmButtonText: '确定'
         });
       }
     }
