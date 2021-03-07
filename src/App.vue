@@ -43,16 +43,21 @@
         api.httpMethod("GET", "logout/", {})
       })
 
-      api.httpMethod("POST", "login/", {
-        'ASP': api.getASPSESSION()
-      }).then(res => {
-        this.$root.AVATAR = res.avatar
-        this.$root.UUID = res.uuid
-      }).catch((e) => {
-        this.$root.UUID = 0
-        this.$message.error(e)
+      api.httpMethod("GET", "https://www1.szu.edu.cn/baoxiu/111.asp", {}).then(res => {
+        if (res.match(/(ѧ����(.*?))<\/b>/g)) {
+          api.httpMethod("POST", "login/", {
+            'ASP': api.getASPSESSION()
+          }).then(data => {
+            this.$root.AVATAR = data.avatar
+            this.$root.UUID = data.uuid
+          }).catch((e) => {
+            this.$root.UUID = 0
+            this.$message.error(e)
+          })
+        } else {
+          this.$root.UUID = 0
+        }
       })
-
       if (api.getQueryVariable("id")) {
         this.showURL = 1
       }

@@ -9,4 +9,5 @@ tampermonkey = tampermonkey.replace('targetDescription', setting.description)
 tampermonkey = tampermonkey.replace('targetAuthor', setting.author)
 tampermonkey = tampermonkey.replace('targetUrl', setting.url)
 
-fs.writeFileSync('dist/tampermonkey.js', tampermonkey + '\n' + 'unsafeWindow.onload = function () {' + '\n    ' + mainJs + '\n' + '}')
+// fs.writeFileSync('dist/tampermonkey.js', tampermonkey + '\n' + '(function() {' + '\n    ' + mainJs + '\n' + '})();')
+fs.writeFileSync('dist/tampermonkey.js', tampermonkey + '\n' + mainJs)

@@ -19,7 +19,7 @@
 ```
 ### `config/tampermonkey.js`
 阅读油猴文档<a href="https://www.tampermonkey.net/documentation.php?ext=dhdg&locale=zh">https://www.tampermonkey.net/documentation.php?ext=dhdg&locale=zh</a>
-### `config/webpack.config.js.js`
+### `config/webpack.config.js`
 阅读webpack文档<a href="https://webpack.docschina.org/concepts/">https://webpack.docschina.org/concepts/</a>
 ### `config/build.js`
 在webpack打包后重写为标准的油猴脚本
