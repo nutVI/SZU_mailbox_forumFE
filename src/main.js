@@ -1,19 +1,5 @@
 import api from './function/utils'
-api.loadStyle('https://cdn.jsdelivr.net/npm/element-ui@2.15.0/lib/theme-chalk/index.min.css')
-
-var oMeta = document.createElement('meta');
-oMeta.content = 'no-referrer';
-oMeta.name = 'referrer';
-document.head.appendChild(oMeta);
-
-let father = document.getElementById('testVueToTamper') ||
-  document.querySelector("body > table > tbody > tr:nth-child(2) > td > table > tbody > tr:nth-child(3) > td > table > tbody > tr:nth-child(2) > td")
-if (!api.getQueryVariable("id")) {
-  father = document.body
-}
-let divApp = document.createElement('div')
-divApp.id = 'app'
-father.append(divApp)
+api.loadInit()
 
 import Vue from 'vue'
 import App from './App.vue'

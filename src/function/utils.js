@@ -1,12 +1,4 @@
 export default {
-  loadStyle(url) {
-    const link = document.createElement('link');
-    link.rel = 'stylesheet';
-    link.type = 'text/css';
-    link.href = url;
-    link.media = 'all';
-    document.documentElement.appendChild(link);
-  },
   getQueryVariable(variable) {
     const query = window.location.search.substring(1);
     const vars = query.split("&");
@@ -18,6 +10,28 @@ export default {
     }
     return (false);
   },
+  loadInit() {
+    const link = document.createElement('link');
+    link.rel = 'stylesheet';
+    link.type = 'text/css';
+    link.href = 'https://cdn.jsdelivr.net/npm/element-ui@2.15.0/lib/theme-chalk/index.min.css';
+    link.media = 'all';
+    document.head.appendChild(link);
+
+    const oMeta = document.createElement('meta');
+    oMeta.content = 'no-referrer';
+    oMeta.name = 'referrer';
+    document.head.appendChild(oMeta);
+
+    let father = document.getElementById('testVueToTamper') ||
+      document.querySelector("body > table > tbody > tr:nth-child(2) > td > table > tbody > tr:nth-child(3) > td > table > tbody > tr:nth-child(2) > td")
+    if (!this.getQueryVariable("id")) {
+      father = document.body
+    }
+    const divApp = document.createElement('div')
+    divApp.id = 'app'
+    father.append(divApp)
+  },
   getLength(str) {
     const ele = document.getElementById('textLength')
     ele.textContent = str
@@ -27,7 +41,7 @@ export default {
   },
   getASPSESSION() {
     if (process.env.VUE_APP_ENVIRONMENT === "development")
-      return "ASPSESSIONIDSCRDTSTB=GNKKCFJDMKJPLPFEPLEPDCAO---ASPSESSIONIDQCSARQQD=DOGNPMCBDFCNHNHMKAIABPMC"
+      return "ASPSESSIONIDSCQCSTSA=MCEFBECBLJLDGLFOEEHFJMGD"
     let cookieStr = document.cookie.split('; ');
     let cookies = "null";
     let isFirst = true;
@@ -44,7 +58,8 @@ export default {
     return cookies
   },
   async httpMethod(method, url, data) {
-    url = process.env.VUE_APP_Url + url
+    if (url.slice(0, 8) != "https://" && url.slice(0, 7) != "http://")
+      url = process.env.VUE_APP_Url + url
     const xml = new XMLHttpRequest();
     xml.withCredentials = true
     let str = '';
@@ -66,8 +81,12 @@ export default {
     }
     return new Promise((resolve, reject) => {
       xml.onload = () => {
-        if (xml.status == 200) resolve(JSON.parse(xml.responseText))
-        else reject(xml.responseText);
+        if (xml.status == 200) {
+          if (url == "https://www1.szu.edu.cn/baoxiu/111.asp")
+            resolve(xml.responseText)
+          else
+            resolve(JSON.parse(xml.responseText))
+        } else reject(xml.responseText);
       }
     })
   },
