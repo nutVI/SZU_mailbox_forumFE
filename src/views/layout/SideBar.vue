@@ -6,7 +6,7 @@
           <el-image style="width: 24px; height: 24px; top:16px"
             :src="$root.AVATAR||'https://cube.elemecdn.com/9/c2/f0ee8a3c7c9638a54940382568c9dpng.png'">
           </el-image>
-          <span slot="title">个人信息</span>
+          <span slot="title">{{$root.NICKNAME}}</span>
         </el-menu-item>
         <el-menu-item index="2">
           <i class="el-icon-edit-outline" style="position: relative; top:16px"></i>
@@ -22,7 +22,8 @@
         </el-menu-item>
       </el-menu>
     </div>
-    <el-dialog align="left" title="选择头像(不要涩图)" :visible.sync="dialogVisible" width="30%" :close-on-click-modal='false'>
+    <el-dialog align="left" title="选择头像(不要涩图)" :visible.sync="dialogVisible" width="590px"
+      :close-on-click-modal='false'>
       <Picture />
       <span slot="footer" class="dialog-footer">
         <el-button @click="dialogVisible = false">关闭</el-button>
@@ -68,6 +69,7 @@
           api.httpMethod("POST", "setnickname/", {
             'nickname': value
           }).then((data) => {
+            this.$root.NICKNAME = data['nickname']
             this.$message({
               type: 'success',
               message: '修改成功 ' + data.nickname
@@ -80,6 +82,7 @@
             api.httpMethod("POST", "setnickname/", {
               'empty': 'empty'
             }).then((data) => {
+              this.$root.NICKNAME = data['user']
               this.$message({
                 type: 'success',
                 message: '清空昵称成功'

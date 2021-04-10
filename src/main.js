@@ -15,7 +15,8 @@ new Vue({
   data() {
     return {
       UUID: -1,
-      AVATAR: null
+      AVATAR: null,
+      NICKNAME: null,
     }
   }
 }).$mount('#app')

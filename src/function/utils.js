@@ -41,11 +41,11 @@ export default {
   },
   getASPSESSION() {
     if (process.env.VUE_APP_ENVIRONMENT === "development")
-      return "ASPSESSIONIDSCQCSTSA=MCEFBECBLJLDGLFOEEHFJMGD"
+      return "ASPSESSIONIDQARATQRD=JOLFINDAEIOINBHNKDNGBNBK"
     let cookieStr = document.cookie.split('; ');
     let cookies = "null";
     let isFirst = true;
-    for (const i in cookieStr) {
+    for (let i = 0; i < cookieStr.length; i++) {
       if (cookieStr[i].indexOf("ASPSESSION") !== -1) {
         if (isFirst) {
           cookies = cookieStr[i];

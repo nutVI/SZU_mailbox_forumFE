@@ -43,25 +43,33 @@
         api.httpMethod("GET", "logout/", {})
       })
 
-      api.httpMethod("GET", "https://www1.szu.edu.cn/baoxiu/111.asp", {}).then(res => {
-        if (res.match(/(ѧ����(.*?))<\/b>/g)) {
-          api.httpMethod("POST", "login/", {
-            'ASP': api.getASPSESSION()
-          }).then(data => {
-            this.$root.AVATAR = data.avatar
-            this.$root.UUID = data.uuid
-          }).catch((e) => {
+      if (process.env.VUE_APP_ENVIRONMENT === "development") this.getMsg()
+      else
+        api.httpMethod("GET", "https://www1.szu.edu.cn/baoxiu/111.asp", {}).then(res => {
+          if (res.match(/(ѧ����(.*?))<\/b>/g)) {
+            this.getMsg()
+          } else {
             this.$root.UUID = 0
-            this.$message.error(e)
-          })
-        } else {
-          this.$root.UUID = 0
-        }
-      })
+          }
+        })
       if (api.getQueryVariable("id")) {
         this.showURL = 1
       }
     },
+    methods: {
+      getMsg() {
+        api.httpMethod("POST", "login/", {
+          'ASP': api.getASPSESSION()
+        }).then(data => {
+          this.$root.AVATAR = data.avatar
+          this.$root.UUID = data.uuid
+          this.$root.NICKNAME = data.nickname
+        }).catch((e) => {
+          this.$root.UUID = 0
+          this.$message.error(e)
+        })
+      }
+    }
   }
 </script>
 
