@@ -27,21 +27,27 @@
                 </div>
               </el-col>
               <el-col :span="1">
-                <el-row type="flex" justify="center" align="middle">
+                <el-row style="position:relation;left:10px" type="flex" justify="center" align="middle">
                   <el-button v-if="$root.UUID==item.row.creator.uuid" style="padding:0;margin-bottom:2px" type="text"
                     class="text-dangerous-buttonSelect" @click="deleteReply(item.row.id, item.$index)"> 删除
                   </el-button>
-                  <el-button v-else size="mini" type="text" style="padding:0;margin-bottom:2px;" disabled>
-                    <i style="font-size:16px" class="iconfont icon0_like2" />
-                    <font style="font-size:14px">1</font>
-                  </el-button>
                 </el-row>
               </el-col>
-              <el-col :span="5" style="font-family: Avenir, Helvetica, Arial, sans-serif;">
-                <div style="margin-left:10px">
-                  {{ item.row.time.substring(0, 10) }}
-                  {{ item.row.time.substring(11, 16) }}
-                </div>
+              <el-col :span="6" style="font-family: Avenir, Helvetica, Arial, sans-serif;">
+                <el-row type="flex" justify="center" align="middle">
+                  <div style="margin-left:10px">
+                    {{ item.row.time.substring(0, 10) }}
+                    {{ item.row.time.substring(11, 16) }}
+                  </div>
+                </el-row>
+              </el-col>
+
+              <el-col :span="2">
+                <el-button size="mini" type="text" style="padding:0;" @click="likeIt(item.row.id, item.$index)">
+                  <i v-if="!item.row.isLike" style="font-size:16px;" class="iconfont icon0_like1 iconfont-hover" />
+                  <i v-else style="font-size:16px;" class="iconfont icon0_like2" />
+                  <font style="font-size:12px;position:relative;top:-1px;color:#aaaaaa">{{item.row.like}}</font>
+                </el-button>
               </el-col>
               <el-col :span="2">
                 <el-button style="padding:0;margin-bottom:2px" type="text" class="text-buttonSelect"
@@ -103,6 +109,30 @@
       }, 250)
     },
     methods: {
+      likeIt(id, index) {
+        let isLike = this.commentObj.replies.replies[index].isLike
+        if (!isLike) {
+          api.httpMethod('POST', 'addlike/', {
+            'id': id,
+            'type': 'reply'
+          }).then(() => {
+            this.commentObj.replies.replies[index].like++;
+            this.commentObj.replies.replies[index].isLike = !isLike;
+          }).catch(e => {
+            this.$message.error(e)
+          })
+        } else {
+          api.httpMethod('POST', 'cancelike/', {
+            'id': id,
+            'type': 'reply'
+          }).then(() => {
+            this.commentObj.replies.replies[index].like--;
+            this.commentObj.replies.replies[index].isLike = !isLike;
+          }).catch(e => {
+            this.$message.error(e)
+          })
+        }
+      },
       getReply() {
         this.commentObj.reply.loading = true
         api.httpMethod('GET', 'reply/', {
@@ -191,5 +221,13 @@
     margin-top: 5px;
     width: 32px;
     height: 32px;
+  }
+
+  .iconfont-hover {
+    color: #95adc5;
+  }
+
+  .iconfont-hover:hover {
+    color: #409EFF;
   }
 </style>
