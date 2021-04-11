@@ -40,23 +40,28 @@
                   {{ scope.row.level + "楼" }}
                 </div>
               </el-col>
-              <el-col :span="18">
+              <el-col :span="17">
                 {{ scope.row.time.substring(0, 10) }}
                 {{ scope.row.time.substring(11, 16) }}
               </el-col>
-              <el-col :span="4">
+              <el-col :span="2">
                 <el-row type="flex" justify="center" align="middle">
-                  <el-button class="buttonSelect" v-if="$root.UUID==scope.row.creator.uuid" size="mini"
-                    @click="deleteComment(scope.row.id, scope.$index)" type="danger">
+                  <el-button class="text-dangerous-buttonSelect" v-if="$root.UUID==scope.row.creator.uuid"
+                    @click="deleteComment(scope.row.id, scope.$index)" size="mini" type="text">
                     删除
-                  </el-button>
-                  <el-button v-else size="mini" type="text" style="padding:0;" disabled>
-                    <i style="font-size:24px" class="iconfont icon0_like1" />
-                    <font style="font-size:14px">1</font>
-                    <!-- icon0_like2 -->
                   </el-button>
                 </el-row>
               </el-col>
+
+              <el-col :span="2">
+                <el-button size="mini" type="text" style="padding:0;" @click="likeIt(scope.row.id, scope.$index)">
+                  <i v-if="!scope.row.isLike" style="font-size:22px;" class="iconfont icon0_like1 iconfont-hover" />
+                  <i v-else style="font-size:22px;" class="iconfont icon0_like2" />
+                  <font style="font-size:12px;position:relative;top:-2px;color:#aaaaaa">{{scope.row.like}}</font>
+                  <!-- icon0_like2 -->
+                </el-button>
+              </el-col>
+
               <el-col :span="3">
                 <el-badge :value="scope.row.replies.total" type="primary">
                   <el-button class="buttonSelect" size="mini" type="primary" @click="popReply(scope.$index)">回复
@@ -124,6 +129,31 @@
       }, 250)
     },
     methods: {
+      likeIt(id, index) {
+        console.log(id, index)
+        let isLike = this.comment[index].isLike
+        if (!isLike) {
+          api.httpMethod('POST', 'addlike/', {
+            'id': id,
+            'type': 'comment'
+          }).then(() => {
+            this.comment[index].like++;
+            this.comment[index].isLike = !isLike;
+          }).catch(e => {
+            this.$message.error(e)
+          })
+        } else {
+          api.httpMethod('POST', 'cancelike/', {
+            'id': id,
+            'type': 'comment'
+          }).then(() => {
+            this.comment[index].like--;
+            this.comment[index].isLike = !isLike;
+          }).catch(e => {
+            this.$message.error(e)
+          })
+        }
+      },
       getComment() {
         this.loading = true;
         api.httpMethod('GET', 'comment/', {
@@ -257,5 +287,13 @@
 
   .commentContent {
     min-height: 97px;
+  }
+
+  .iconfont-hover {
+    color: #95adc5;
+  }
+
+  .iconfont-hover:hover {
+    color: #409EFF;
   }
 </style>
