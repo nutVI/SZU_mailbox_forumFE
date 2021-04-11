@@ -63,7 +63,7 @@
               </el-col>
 
               <el-col :span="3">
-                <el-badge :value="scope.row.replies.total" type="primary">
+                <el-badge :hidden="!scope.row.replies.total" :value="scope.row.replies.total" type="primary">
                   <el-button class="buttonSelect" size="mini" type="primary" @click="popReply(scope.$index)">回复
                   </el-button>
                 </el-badge>

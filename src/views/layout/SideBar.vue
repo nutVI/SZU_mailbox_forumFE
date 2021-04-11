@@ -2,12 +2,21 @@
   <div>
     <div class="sidebar">
       <el-menu :default-active="active" class="el-menu-vertical-demo" @select="selectIcon" :collapse="true">
-        <el-menu-item index="1">
-          <el-image style="width: 24px; height: 24px; top:16px"
-            :src="$root.AVATAR||'https://cube.elemecdn.com/9/c2/f0ee8a3c7c9638a54940382568c9dpng.png'">
-          </el-image>
-          <span slot="title">{{$root.NICKNAME}}</span>
-        </el-menu-item>
+        <el-popover placement="right-start" width="400" trigger="click">
+          <el-table :data="gridData">
+            <el-table-column width="150" property="date" label="日期"></el-table-column>
+            <el-table-column width="100" property="name" label="姓名"></el-table-column>
+            <el-table-column width="300" property="address" label="地址"></el-table-column>
+          </el-table>
+          <el-menu-item slot="reference" index="1">
+            <el-badge :hidden="!$root.MESSAGE" :value="$root.MESSAGE" :max="99" style="top:16px">
+              <el-image style="width: 24px; height: 24px;"
+                :src="$root.AVATAR||'https://cube.elemecdn.com/9/c2/f0ee8a3c7c9638a54940382568c9dpng.png'">
+              </el-image>
+            </el-badge>
+            <span slot="title">{{$root.NICKNAME}}</span>
+          </el-menu-item>
+        </el-popover>
         <el-menu-item index="2">
           <i class="el-icon-edit-outline" style="position: relative; top:16px"></i>
           <span slot="title">修改昵称</span>
@@ -42,7 +51,24 @@
     data() {
       return {
         active: '1',
-        dialogVisible: false
+        dialogVisible: false,
+        gridData: [{
+          date: '2016-05-02',
+          name: '王小虎',
+          address: '上海市普陀区金沙江路 1518 弄'
+        }, {
+          date: '2016-05-04',
+          name: '王小虎',
+          address: '上海市普陀区金沙江路 1518 弄'
+        }, {
+          date: '2016-05-01',
+          name: '王小虎',
+          address: '上海市普陀区金沙江路 1518 弄'
+        }, {
+          date: '2016-05-03',
+          name: '王小虎',
+          address: '上海市普陀区金沙江路 1518 弄'
+        }]
       };
     },
     methods: {
@@ -105,7 +131,7 @@
     top: 225px;
     left: 0;
     position: fixed;
-    z-index: 3001;
+    z-index: 2022;
   }
 
   .sidebar>>>.el-tooltip {

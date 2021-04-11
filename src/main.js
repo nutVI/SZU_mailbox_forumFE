@@ -17,6 +17,7 @@ new Vue({
       UUID: -1,
       AVATAR: null,
       NICKNAME: null,
+      MESSAGE: 0
     }
   }
 }).$mount('#app')

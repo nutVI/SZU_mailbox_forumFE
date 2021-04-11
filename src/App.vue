@@ -64,6 +64,7 @@
           this.$root.AVATAR = data.avatar
           this.$root.UUID = data.uuid
           this.$root.NICKNAME = data.nickname
+          this.$root.MESSAGE = data.reply
         }).catch((e) => {
           this.$root.UUID = 0
           this.$message.error(e)
