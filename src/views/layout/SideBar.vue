@@ -2,12 +2,8 @@
   <div>
     <div class="sidebar">
       <el-menu :default-active="active" class="el-menu-vertical-demo" @select="selectIcon" :collapse="true">
-        <el-popover placement="right-start" width="400" trigger="click">
-          <el-table :data="gridData">
-            <el-table-column width="150" property="date" label="日期"></el-table-column>
-            <el-table-column width="100" property="name" label="姓名"></el-table-column>
-            <el-table-column width="300" property="address" label="地址"></el-table-column>
-          </el-table>
+        <el-popover placement="right-start" width="300">
+          <MessageBox v-if="popoverVisible"></MessageBox>
           <el-menu-item slot="reference" index="1">
             <el-badge :hidden="!$root.MESSAGE" :value="$root.MESSAGE" :max="99" style="top:16px">
               <el-image style="width: 24px; height: 24px;"
@@ -38,43 +34,30 @@
         <el-button @click="dialogVisible = false">关闭</el-button>
       </span>
     </el-dialog>
+    {{popoverVisible}}
   </div>
 </template>
 
 <script>
   import api from '../../function/utils'
   import Picture from './Picture.vue'
+  import MessageBox from './MessageBox.vue'
   export default {
     components: {
-      Picture
+      Picture,
+      MessageBox
     },
     data() {
       return {
         active: '1',
         dialogVisible: false,
-        gridData: [{
-          date: '2016-05-02',
-          name: '王小虎',
-          address: '上海市普陀区金沙江路 1518 弄'
-        }, {
-          date: '2016-05-04',
-          name: '王小虎',
-          address: '上海市普陀区金沙江路 1518 弄'
-        }, {
-          date: '2016-05-01',
-          name: '王小虎',
-          address: '上海市普陀区金沙江路 1518 弄'
-        }, {
-          date: '2016-05-03',
-          name: '王小虎',
-          address: '上海市普陀区金沙江路 1518 弄'
-        }]
+        popoverVisible: false,
       };
     },
     methods: {
       selectIcon(index) {
         this.active = index
-        if (index == 1);
+        if (index == 1) this.popoverVisible = true
         else if (index == 2) this.setNickname()
         else if (index == 3) this.dialogVisible = true
         else if (index == 4) this.debug()
