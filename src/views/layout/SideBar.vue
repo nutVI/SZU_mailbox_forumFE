@@ -48,7 +48,8 @@
     methods: {
       selectIcon(index) {
         this.active = index
-        if (index == 2) this.setNickname()
+        if (index == 1);
+        else if (index == 2) this.setNickname()
         else if (index == 3) this.dialogVisible = true
         else if (index == 4) this.debug()
       },
@@ -104,6 +105,7 @@
     top: 225px;
     left: 0;
     position: fixed;
+    z-index: 3001;
   }
 
   .sidebar>>>.el-tooltip {

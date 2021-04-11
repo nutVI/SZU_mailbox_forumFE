@@ -20,7 +20,7 @@
               </font>
               {{item.row.content}}
             </el-row>
-            <el-row style="height:23px" type="flex" align="middle" justify="end">
+            <el-row style="height:23px" type="flex" align="middle" justify="end" class="reply-delete">
               <el-col :span="16">
                 <div style="min-width: 27px">
                   {{ item.row.level + "层" }}
@@ -229,5 +229,13 @@
 
   .iconfont-hover:hover {
     color: #409EFF;
+  }
+
+  .reply-delete>div:nth-of-type(2) {
+    visibility: hidden;
+  }
+
+  .reply-delete:hover>div:nth-of-type(2) {
+    visibility: visible;
   }
 </style>

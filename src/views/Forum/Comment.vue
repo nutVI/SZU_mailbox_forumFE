@@ -34,7 +34,7 @@
           </template>
           <template slot-scope="scope">
             <div class="commentContent">{{scope.row.content}}</div>
-            <el-row type="flex" align="middle">
+            <el-row type="flex" align="middle" class="comment-delete">
               <el-col :span="2">
                 <div style="min-width: 27px">
                   {{ scope.row.level + "楼" }}
@@ -57,7 +57,8 @@
                 <el-button size="mini" type="text" style="padding:0;" @click="likeIt(scope.row.id, scope.$index)">
                   <i v-if="!scope.row.isLike" style="font-size:22px;" class="iconfont icon0_like1 iconfont-hover" />
                   <i v-else style="font-size:22px;" class="iconfont icon0_like2" />
-                  <font style="font-size:14px;position:relative;top:-2px;color:#aaaaaa">{{scope.row.like}}</font>
+                  <font style="font-size:12px;position:relative;top:-2px;color:#aaaaaa">{{scope.row.like}}</font>
+                  <!-- icon0_like2 -->
                 </el-button>
               </el-col>
 
@@ -129,6 +130,7 @@
     },
     methods: {
       likeIt(id, index) {
+        console.log(id, index)
         let isLike = this.comment[index].isLike
         if (!isLike) {
           api.httpMethod('POST', 'addlike/', {
@@ -293,5 +295,13 @@
 
   .iconfont-hover:hover {
     color: #409EFF;
+  }
+
+  .comment-delete>div:nth-of-type(3) {
+    visibility: hidden;
+  }
+
+  .comment-delete:hover>div:nth-of-type(3) {
+    visibility: visible;
   }
 </style>
