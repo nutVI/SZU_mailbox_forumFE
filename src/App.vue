@@ -40,12 +40,12 @@
         "body > table > tbody > tr:nth-child(1) > td > table > tbody > tr:nth-child(3) > td:nth-child(1) > table > tbody > tr:nth-child(1) > td > a:nth-child(3)"
       )
       a && (a.onclick = () => {
-        api.httpMethod("GET", "logout/", {})
+        api.httpJsonMethod("GET", "logout/", {})
       })
 
       if (process.env.VUE_APP_ENVIRONMENT === "development") this.getMsg()
       else
-        api.httpMethod("GET", "https://www1.szu.edu.cn/baoxiu/111.asp", {}).then(res => {
+        api.httpHtmlMethod("GET", "https://www1.szu.edu.cn/baoxiu/111.asp", {}).then(res => {
           if (res.match(/(ѧ����(.*?))<\/b>/g)) {
             this.getMsg()
           } else {
@@ -58,13 +58,15 @@
     },
     methods: {
       getMsg() {
-        api.httpMethod("POST", "login/", {
+        api.httpJsonMethod("POST", "login/", {
           'ASP': api.getASPSESSION()
         }).then(data => {
           this.$root.AVATAR = data.avatar
           this.$root.UUID = data.uuid
           this.$root.NICKNAME = data.nickname
-          this.$root.MESSAGE = data.reply
+          // this.$root.MESSAGE = data.reply
+          this.$root.MESSAGE = 5
+          this.$root.LIKE = 0
         }).catch((e) => {
           this.$root.UUID = 0
           this.$message.error(e)
@@ -129,4 +131,5 @@
   .navfade-leave-to {
     opacity: 0;
   }
+
 </style>

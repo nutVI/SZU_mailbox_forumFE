@@ -41,7 +41,7 @@ export default {
   },
   getASPSESSION() {
     if (process.env.VUE_APP_ENVIRONMENT === "development")
-      return "ASPSESSIONIDQARATQRD=JOLFINDAEIOINBHNKDNGBNBK"
+      return "ASPSESSIONIDSCQAQTQD=PFJKGCPCINBEFJOKFBOBJOKH"
     let cookieStr = document.cookie.split('; ');
     let cookies = "null";
     let isFirst = true;
@@ -57,9 +57,8 @@ export default {
     }
     return cookies
   },
-  async httpMethod(method, url, data) {
-    if (url.slice(0, 8) != "https://" && url.slice(0, 7) != "http://")
-      url = process.env.VUE_APP_Url + url
+  async httpJsonMethod(method, url, data) {
+    url = process.env.VUE_APP_Url + url
     const xml = new XMLHttpRequest();
     xml.withCredentials = true
     let str = '';
@@ -82,10 +81,36 @@ export default {
     return new Promise((resolve, reject) => {
       xml.onload = () => {
         if (xml.status == 200) {
-          if (url == "https://www1.szu.edu.cn/baoxiu/111.asp")
-            resolve(xml.responseText)
-          else
-            resolve(JSON.parse(xml.responseText))
+          resolve(JSON.parse(xml.responseText))
+        } else reject(xml.responseText);
+      }
+    })
+  },
+
+  async httpHtmlMethod(method, url, data) {
+    const xml = new XMLHttpRequest();
+    xml.withCredentials = true
+    let str = '';
+    let isFirst = true;
+    for (const i in data) {
+      if (isFirst) {
+        isFirst = false;
+        str += i + '=' + data[i]
+      } else str += '&' + i + '=' + data[i]
+    }
+
+    if (method == 'GET' || method == 'DELETE') {
+      xml.open(method, url + '?' + str);
+      xml.send(null);
+    } else if (method == 'POST') {
+      xml.open(method, url);
+      xml.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+      xml.send(str);
+    }
+    return new Promise((resolve, reject) => {
+      xml.onload = () => {
+        if (xml.status == 200) {
+          resolve(xml.responseText)
         } else reject(xml.responseText);
       }
     })
