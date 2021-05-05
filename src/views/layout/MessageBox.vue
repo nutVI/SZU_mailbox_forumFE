@@ -15,40 +15,50 @@
       </el-col>
     </el-row>
     <el-row class="scrollBox">
-      <div v-show="radio==1" v-infinite-scroll="load" infinite-scroll-delay="500" style="overflow:visible">
-        <div v-for="item,index in replyMsg.arr" :key="index">
-          <el-card>
-            <el-row>
-              <el-col :span="4">
-                <el-badge is-dot :hidden="!item.isread">
-                  <el-image class="avatar" :src="item.creator.avatar||$root.NULLAVATAR" fit="cover" lazy>
-                  </el-image>
-                </el-badge>
-              </el-col>
-              <el-col :span="20">
-                <el-row>
-                  <strong>{{item.creator.user}}</strong>{{' 回复了你'}}
-                </el-row>
-                <el-row style="font-size:12px">
-                  {{item.time.substring(5, 10)}}
-                </el-row>
-              </el-col>
-            </el-row>
-            <el-row>
-              {{item.reply.content}}
-            </el-row>
-            <el-row>
-              <el-link type="primary" :href="'https://www1.szu.edu.cn/mailbox/view.asp?id='+item.reply.post_id">
-                {{'信箱详情页: '+ item.reply.post}}</el-link>
-            </el-row>
+      <transition name="msgfade">
+        <div v-show="radio==1" v-infinite-scroll="load" infinite-scroll-delay="500" style="overflow:visible">
+          <div v-for="item,index in replyMsg.arr" :key="index">
+            <el-card>
+              <el-row>
+                <el-col :span="4">
+                  <el-badge is-dot :hidden="!item.isread">
+                    <el-image class="avatar" :src="item.creator.avatar||$root.NULLAVATAR" fit="cover" lazy>
+                    </el-image>
+                  </el-badge>
+                </el-col>
+                <el-col :span="20">
+                  <el-row>
+                    <strong>{{item.creator.user}}</strong>{{' 回复了你'}}
+                  </el-row>
+                  <el-row style="font-size:12px">
+                    {{item.time.substring(5, 10)}}
+                  </el-row>
+                </el-col>
+              </el-row>
+              <el-row>
+                {{item.reply.content}}
+              </el-row>
+              <el-row>
+                <el-link type="primary" :href="'https://www1.szu.edu.cn/mailbox/view.asp?id='+item.reply.post_id">
+                  {{'信箱详情页: '+ item.reply.post}}</el-link>
+              </el-row>
+            </el-card>
+          </div>
+          <el-card v-if="replyMsg.loging" v-loading="replyMsg.loging">
+            <div class="msg-loging">获取中</div>
+          </el-card>
+          <el-card v-else>
+            <div class="msg-loging">到底了</div>
           </el-card>
         </div>
-      </div>
-      <div v-show="radio==2">
-        <el-card>
-          开发中
-        </el-card>
-      </div>
+      </transition>
+      <transition name="msgfade">
+        <div v-show="radio==2">
+          <el-card>
+            开发中
+          </el-card>
+        </div>
+      </transition>
     </el-row>
     <el-row style="margin-top:10px" type="flex" align="middle" justify="end">
       <el-col :span="6">
@@ -70,6 +80,7 @@
           total: -1,
           limit: 4,
           cache: 0,
+          loging: true,
           arr: []
         }
       };
@@ -79,7 +90,10 @@
     },
     methods: {
       load() {
-        if (this.replyMsg.arr.length >= this.replyMsg.total) return;
+        if (this.replyMsg.arr.length >= this.replyMsg.total) {
+          this.replyMsg.loging = false
+          return;
+        }
         this.getReplyMsg();
         this.$message.success('加载中');
       },
@@ -113,7 +127,7 @@
 
   .scrollBox {
     height: 260px;
-    overflow: auto;
+    overflow: scroll;
   }
 
   .avatar {
@@ -141,5 +155,21 @@
     box-shadow: inset 0 0 5px rgba(175, 175, 175, 0.534);
     border-radius: 10px;
     background: #ffffff;
+  }
+
+  .msg-loging {
+    text-align: center;
+    font-size: 14px;
+    color: #868686;
+  }
+
+  .msgfade-enter-active,
+  .msgfade-leave-active {
+    transition: opacity .2s;
+  }
+
+  .msgfade-enter,
+  .msgfade-leave-to {
+    opacity: 0;
   }
 </style>
