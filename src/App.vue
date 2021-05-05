@@ -106,6 +106,15 @@
     line-height: 100%;
   }
 
+  .text-buttonSelect:hover span {
+    color: #7cbbff;
+  }
+
+
+  .text-buttonSelect:active span {
+    color: #006dda;
+  }
+
   .text-dangerous-buttonSelect span {
     color: #F56C6C;
     font-family: 微软雅黑;
@@ -113,12 +122,38 @@
     line-height: 100%;
   }
 
-  .text-buttonSelect:active span {
+  .text-dangerous-buttonSelect:active span {
+    color: #d33d3d;
+  }
+
+  .text-buttonSelect-mini span {
+    color: #409eff;
+    font-family: 微软雅黑;
+    font-size: 12px;
+    line-height: 100%;
+  }
+
+  .text-buttonSelect-mini span:hover {
+    color: #7cbbff;
+  }
+
+  .text-buttonSelect-mini:active span {
     color: #006dda;
   }
 
-  .text-dangerous-buttonSelect:active span {
-    color: #d33d3d;
+  .text-link>a:hover {
+    text-decoration: none;
+  }
+
+  .text-link span {
+    color: #409eff;
+    font-family: 微软雅黑;
+    font-size: 14px;
+    line-height: 1.4;
+  }
+
+  .text-link span:hover {
+    color: #7cbbff;
   }
 
   .navfade-enter-active,

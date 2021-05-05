@@ -38,7 +38,7 @@
               <el-row>
                 {{item.reply.content}}
               </el-row>
-              <el-row>
+              <el-row class="text-link">
                 <el-link @click.native="readReply(item.id,index)" type="primary"
                   :href="'https://www1.szu.edu.cn/mailbox/view.asp?id='+item.reply.post_id" target="_blank">
                   {{item.reply.post}}</el-link>
@@ -63,7 +63,7 @@
     </el-row>
     <el-row style="margin-top:10px" type="flex" align="middle" justify="end">
       <el-col :span="6">
-        <el-button @click="readReply()" type="text" size="mini">全部收取</el-button>
+        <el-button @click="readReply()" class="text-buttonSelect-mini" type="text" size="mini">全部收取</el-button>
       </el-col>
     </el-row>
   </div>
@@ -201,7 +201,6 @@
     width: 32px;
     height: 32px;
   }
-
 
   .scrollBox::-webkit-scrollbar {
     /*滚动条整体样式*/
