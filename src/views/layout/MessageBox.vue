@@ -5,30 +5,49 @@
         <el-row>
           <el-radio-group v-model="radio" size="small">
             <el-badge :hidden="!$root.MESSAGE" :value="$root.MESSAGE" :max="99" style="z-index:3100">
-              <el-radio-button label="回复"></el-radio-button>
+              <el-radio-button label="1">回复</el-radio-button>
             </el-badge>
             <el-badge :hidden="!$root.LIKE" :value="$root.LIKE" :max="99">
-              <el-radio-button label="点赞"></el-radio-button>
+              <el-radio-button label="2">点赞</el-radio-button>
             </el-badge>
           </el-radio-group>
         </el-row>
       </el-col>
     </el-row>
     <el-row class="scrollBox">
-      <div class="infinite-list" v-infinite-scroll="load" infinite-scroll-delay="500" style="overflow:visible">
+      <div v-show="radio==1" v-infinite-scroll="load" infinite-scroll-delay="500" style="overflow:visible">
         <div v-for="item,index in replyMsg.arr" :key="index">
-          <el-badge is-dot :hidden="!item.isread">
-            <el-card class="infinite-list-item">
-              <el-image class="avatar" :src="item.creator.avatar||$root.NULLAVATAR" fit="cover" lazy>
-              </el-image>
-              {{ item.creator.user }}
-              {{item.time.substring(5, 10)}}
+          <el-card>
+            <el-row>
+              <el-col :span="4">
+                <el-badge is-dot :hidden="!item.isread">
+                  <el-image class="avatar" :src="item.creator.avatar||$root.NULLAVATAR" fit="cover" lazy>
+                  </el-image>
+                </el-badge>
+              </el-col>
+              <el-col :span="20">
+                <el-row>
+                  <strong>{{item.creator.user}}</strong>{{' 回复了你'}}
+                </el-row>
+                <el-row style="font-size:12px">
+                  {{item.time.substring(5, 10)}}
+                </el-row>
+              </el-col>
+            </el-row>
+            <el-row>
               {{item.reply.content}}
-              <a :href="'https://www1.szu.edu.cn/mailbox/view.asp?id='+item.reply.post_id" target="_blank"></a>
-            </el-card>
-          </el-badge>
+            </el-row>
+            <el-row>
+              <el-link type="primary" :href="'https://www1.szu.edu.cn/mailbox/view.asp?id='+item.reply.post_id">
+                {{'信箱详情页: '+ item.reply.post}}</el-link>
+            </el-row>
+          </el-card>
         </div>
-
+      </div>
+      <div v-show="radio==2">
+        <el-card>
+          开发中
+        </el-card>
       </div>
     </el-row>
     <el-row style="margin-top:10px" type="flex" align="middle" justify="end">
@@ -45,11 +64,11 @@
   export default {
     data() {
       return {
-        radio: "回复",
+        radio: "1",
         replyMsg: {
           currentPage: 1,
           total: -1,
-          limit: 2,
+          limit: 4,
           cache: 0,
           arr: []
         }
@@ -57,13 +76,6 @@
     },
     mounted() {
       this.getReplyMsg();
-
-      api.httpHtmlMethod("GET", "mailbox/view.asp", {
-        "id": 304124
-      }, "gb2312").then((res) => {
-        let str = res.match(/(<title>=?)(.*?)(?=<\/title>)/)[2]
-        console.log(str)
-      })
     },
     methods: {
       load() {
@@ -78,7 +90,14 @@
         }).then((data) => {
           this.replyMsg.total = data.total;
           for (const i in data.msg) {
-            this.replyMsg.arr.push(data.msg[i])
+            api.httpHtmlMethod("GET", "mailbox/view.asp", {
+              "id": data.msg[i].reply.post_id
+            }, "gb2312").then((res) => {
+              this.replyMsg.arr.push(data.msg[i])
+              let str = res.match(/(<title>=?)(.*?)(?=<\/title>)/)[2].slice(0, -8)
+              // if (str.length > 12) str = str.substring(0, 10) + "..."
+              this.$set(data.msg[i].reply, 'post', str)
+            })
           }
         })
       }
@@ -88,17 +107,39 @@
 
 <style scoped>
   .msgBox {
-    height: 285px;
+    height: 335px;
     width: 310px;
   }
 
   .scrollBox {
-    height: 210px;
+    height: 260px;
     overflow: auto;
   }
 
   .avatar {
-    width: 35px;
-    height: 35px;
+    width: 32px;
+    height: 32px;
+  }
+
+
+  .scrollBox::-webkit-scrollbar {
+    /*滚动条整体样式*/
+    width: 5px;
+    /*高宽分别对应横竖滚动条的尺寸*/
+    height: 1px;
+  }
+
+  .scrollBox::-webkit-scrollbar-thumb {
+    /*滚动条里面小方块*/
+    border-radius: 10px;
+    box-shadow: inset 0 0 5px rgba(0, 0, 0, 0.2);
+    background: #bebebe;
+  }
+
+  .scrollBox::-webkit-scrollbar-track {
+    /*滚动条里面轨道*/
+    box-shadow: inset 0 0 5px rgba(175, 175, 175, 0.534);
+    border-radius: 10px;
+    background: #ffffff;
   }
 </style>
