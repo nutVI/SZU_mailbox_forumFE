@@ -39,6 +39,13 @@ export default {
     ele.textContent = ''
     return Math.ceil(length / 664) * 23
   },
+  getLength14Size(str) {
+    const ele = document.getElementById('textLength')
+    ele.textContent = str
+    const length = ele.clientWidth
+    ele.textContent = ''
+    return length
+  },
   getASPSESSION() {
     if (process.env.VUE_APP_ENVIRONMENT === "development")
       return "ASPSESSIONIDSCQAQTQD=PFJKGCPCINBEFJOKFBOBJOKH"

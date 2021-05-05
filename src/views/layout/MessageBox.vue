@@ -16,7 +16,7 @@
     </el-row>
     <el-row class="scrollBox">
       <transition name="msgfade">
-        <div v-show="radio==1" v-infinite-scroll="load" infinite-scroll-delay="500" style="overflow:visible">
+        <div v-show="radio==1" v-infinite-scroll="load" infinite-scroll-delay="350" style="overflow:visible">
           <div v-for="item,index in replyMsg.arr" :key="index">
             <el-card>
               <el-row>
@@ -31,7 +31,7 @@
                     <strong>{{item.creator.user}}</strong>{{' 回复了你'}}
                   </el-row>
                   <el-row style="font-size:12px">
-                    {{item.time.substring(5, 10)}}
+                    {{item.time.substring(5, 10)+" "+ item.time.substring(11, 16)}}
                   </el-row>
                 </el-col>
               </el-row>
@@ -41,7 +41,7 @@
               <el-row>
                 <el-link @click.native="readReply(item.id,index)" type="primary"
                   :href="'https://www1.szu.edu.cn/mailbox/view.asp?id='+item.reply.post_id" target="_blank">
-                  {{'信箱详情页: '+ item.reply.post}}</el-link>
+                  {{item.reply.post}}</el-link>
               </el-row>
             </el-card>
           </div>
@@ -96,7 +96,6 @@
           return;
         }
         this.getReplyMsg();
-        this.$message.success('加载中');
       },
       getReplyMsg() {
         api.httpJsonMethod('GET', 'msg/bereply/', {
@@ -104,15 +103,39 @@
           'offset': this.replyMsg.currentPage,
         }).then((data) => {
           this.replyMsg.total = data.total;
+          this.replyMsg.currentPage++;
           for (const i in data.msg) {
-            api.httpHtmlMethod("GET", "mailbox/view.asp", {
-              "id": data.msg[i].reply.post_id
-            }, "gb2312").then((res) => {
+            // 处理多次相同请求
+            let str = localStorage.getItem(data.msg[i].reply.post_id);
+            if (str == "wait") {
+              // 轮询
+              let timeInter = setInterval(() => {
+                str = localStorage.getItem(data.msg[i].reply.post_id);
+                if (str != "wait") {
+                  this.replyMsg.arr.push(data.msg[i])
+                  this.$set(data.msg[i].reply, 'post', str)
+                  // 轮询退出
+                  clearInterval(timeInter)
+                }
+              }, 50)
+            } else if (str) {
               this.replyMsg.arr.push(data.msg[i])
-              let str = res.match(/(<title>=?)(.*?)(?=<\/title>)/)[2].slice(0, -8)
-              // if (str.length > 12) str = str.substring(0, 10) + "..."
               this.$set(data.msg[i].reply, 'post', str)
-            })
+            } else {
+              // 先到者获取一个wait标志锁
+              localStorage.setItem(data.msg[i].reply.post_id, 'wait')
+              api.httpHtmlMethod("GET", "mailbox/view.asp", {
+                "id": data.msg[i].reply.post_id
+              }, "gb2312").then((res) => {
+                this.replyMsg.arr.push(data.msg[i])
+
+                // 获取适合长度的字符串
+                str = this.getStr(str, res)
+
+                localStorage.setItem(data.msg[i].reply.post_id, str)
+                this.$set(data.msg[i].reply, 'post', str)
+              })
+            }
           }
         })
       },
@@ -130,14 +153,34 @@
           if (data.all) {
             this.$message.success(res.result)
             for (const i in this.replyMsg.arr) {
-              this.replyMsg.arr[i].isread = true
+              if (!this.replyMsg.arr[i].isread) {
+                this.replyMsg.arr[i].isread = true
+                this.$root.MESSAGE--;
+              }
             }
-          } else {
+          } else if (!this.replyMsg.arr[index].isread) {
             this.replyMsg.arr[index].isread = true
+            this.$root.MESSAGE--;
           }
         }).catch((e) => {
           this.$message.error(e)
         })
+      },
+      getStr(str, res) {
+        str = '详情页: ' + res.match(/(<title>=?)(.*?)(?=<\/title>)/)[2].slice(0, -8)
+
+        let fontLength = api.getLength14Size(str)
+        if (fontLength > 263) {
+          str = str.substring(0, Math.floor(str.length * (263 - 10.13) /
+            fontLength))
+          fontLength = api.getLength14Size(str)
+          while (fontLength > 263 - 10.13) {
+            str = str.substring(0, str.length - 1)
+            fontLength = api.getLength14Size(str)
+          }
+          str += "..."
+        }
+        return str
       }
     }
   }
