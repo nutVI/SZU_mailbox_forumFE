@@ -54,7 +54,7 @@
               <el-col :span="2">
                 <el-button size="mini" type="text" style="padding:0;" @click="likeIt(scope.row.id, scope.$index)">
                   <i v-if="!scope.row.isLike" style="font-size:22px;" class="iconfont icon0_like1 iconfont-hover" />
-                  <i v-else style="font-size:22px;" class="iconfont icon0_like2" />
+                  <i v-else style="font-size:22px;" class="iconfont icon0_like2 iconfont-after" />
                   <font style="font-size:12px;position:relative;top:-2px;color:#aaaaaa">{{scope.row.like}}</font>
                   <!-- icon0_like2 -->
                 </el-button>
@@ -295,6 +295,9 @@
     color: #409EFF;
   }
 
+  .iconfont-after {
+    color: #409EFF;
+  }
   .comment-delete>div:nth-of-type(3) {
     visibility: hidden;
   }

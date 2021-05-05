@@ -43,7 +43,7 @@
               <el-col :span="2">
                 <el-button size="mini" type="text" style="padding:0;" @click="likeIt(item.row.id, item.$index)">
                   <i v-if="!item.row.isLike" style="font-size:16px;" class="iconfont icon0_like1 iconfont-hover" />
-                  <i v-else style="font-size:16px;" class="iconfont icon0_like2" />
+                  <i v-else style="font-size:16px;" class="iconfont icon0_like2 iconfont-after" />
                   <font style="font-size:12px;position:relative;top:-1px;color:#aaaaaa">{{item.row.like}}</font>
                 </el-button>
               </el-col>
@@ -226,6 +226,10 @@
   }
 
   .iconfont-hover:hover {
+    color: #409EFF;
+  }
+
+  .iconfont-after {
     color: #409EFF;
   }
 
