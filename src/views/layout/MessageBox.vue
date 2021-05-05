@@ -124,7 +124,7 @@
             } else {
               // 先到者获取一个wait标志锁
               localStorage.setItem(data.msg[i].reply.post_id, 'wait')
-              api.httpHtmlMethod("GET", "mailbox/view.asp", {
+              api.httpHtmlMethod("GET", "/mailbox/view.asp", {
                 "id": data.msg[i].reply.post_id
               }, "gb2312").then((res) => {
                 this.replyMsg.arr.push(data.msg[i])

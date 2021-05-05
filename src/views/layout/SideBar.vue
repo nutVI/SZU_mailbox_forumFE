@@ -113,7 +113,8 @@
     top: 225px;
     left: 0;
     position: fixed;
-    z-index: 2022;
+    /* z-index: 2022; */
+    z-index: 2000;
   }
 
   .sidebar>>>.el-tooltip {
