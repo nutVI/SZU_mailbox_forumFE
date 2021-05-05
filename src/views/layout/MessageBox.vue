@@ -56,8 +56,14 @@
       };
     },
     mounted() {
-      console.log(1)
       this.getReplyMsg();
+
+      api.httpHtmlMethod("GET", "mailbox/view.asp", {
+        "id": 304124
+      }, "gb2312").then((res) => {
+        let str = res.match(/(<title>=?)(.*?)(?=<\/title>)/)[2]
+        console.log(str)
+      })
     },
     methods: {
       load() {
@@ -66,7 +72,6 @@
         this.$message.success('加载中');
       },
       getReplyMsg() {
-        console.log(1)
         api.httpJsonMethod('GET', 'msg/bereply/', {
           'limit': this.replyMsg.limit,
           'offset': this.replyMsg.currentPage,

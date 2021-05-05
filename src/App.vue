@@ -45,8 +45,8 @@
 
       if (process.env.VUE_APP_ENVIRONMENT === "development") this.getMsg()
       else
-        api.httpHtmlMethod("GET", "https://www1.szu.edu.cn/baoxiu/111.asp", {}).then(res => {
-          if (res.match(/(ѧ����(.*?))<\/b>/g)) {
+        api.httpHtmlMethod("GET", "https://www1.szu.edu.cn/baoxiu/111.asp", {}, "gb2312").then(res => {
+          if (res.match(/(学工号(.*?))<\/b>/g)) {
             this.getMsg()
           } else {
             this.$root.UUID = 0
@@ -131,5 +131,4 @@
   .navfade-leave-to {
     opacity: 0;
   }
-
 </style>

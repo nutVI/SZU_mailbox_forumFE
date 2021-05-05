@@ -87,7 +87,7 @@ export default {
     })
   },
 
-  async httpHtmlMethod(method, url, data) {
+  async httpHtmlMethod(method, url, data, charset) {
     const xml = new XMLHttpRequest();
     xml.withCredentials = true
     let str = '';
@@ -101,6 +101,8 @@ export default {
 
     if (method == 'GET' || method == 'DELETE') {
       xml.open(method, url + '?' + str);
+      if (charset != undefined)
+        xml.overrideMimeType("text/html;charset=" + charset)
       xml.send(null);
     } else if (method == 'POST') {
       xml.open(method, url);
