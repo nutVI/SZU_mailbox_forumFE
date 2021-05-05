@@ -6,9 +6,7 @@
         <el-table-column align="center" :label="'评论:' + total" width="96">
           <template slot-scope="scope">
             <el-col>
-              <el-image class="avatar"
-                :src="scope.row.creator.avatar||'https://cube.elemecdn.com/9/c2/f0ee8a3c7c9638a54940382568c9dpng.png'"
-                fit="cover" lazy>
+              <el-image class="avatar" :src="scope.row.creator.avatar||$root.NULLAVATAR" fit="cover" lazy>
               </el-image>
             </el-col>
             <el-col class="userName">{{scope.row.creator.user }}</el-col>
@@ -133,7 +131,7 @@
         console.log(id, index)
         let isLike = this.comment[index].isLike
         if (!isLike) {
-          api.httpMethod('POST', 'addlike/', {
+          api.httpJsonMethod('POST', 'addlike/', {
             'id': id,
             'type': 'comment'
           }).then(() => {
@@ -143,7 +141,7 @@
             this.$message.error(e)
           })
         } else {
-          api.httpMethod('POST', 'cancelike/', {
+          api.httpJsonMethod('POST', 'cancelike/', {
             'id': id,
             'type': 'comment'
           }).then(() => {
@@ -156,7 +154,7 @@
       },
       getComment() {
         this.loading = true;
-        api.httpMethod('GET', 'comment/', {
+        api.httpJsonMethod('GET', 'comment/', {
           'postId': this.postId,
           'limit': this.limit,
           'offset': this.currentPage,
@@ -197,7 +195,7 @@
       },
       commentSubmit() {
         if (this.content.length >= 2) {
-          api.httpMethod('POST', 'comment/', {
+          api.httpJsonMethod('POST', 'comment/', {
             'postId': this.postId,
             'content': this.content,
             'isAnonymous': this.isAnonymous ? 1 : 0,
@@ -236,7 +234,7 @@
           cancelButtonText: '取消',
           type: 'warning'
         }).then(() => {
-          api.httpMethod('DELETE', 'comment/', {
+          api.httpJsonMethod('DELETE', 'comment/', {
             'id': id
           }).then((data) => {
             this.$message.success('删除成功')

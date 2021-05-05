@@ -114,7 +114,7 @@
           context.drawImage(this.imgObj, sourceX, sourceY, sourceWidth, sourceHeight, 0, 0, sourceWidth, sourceHeight);
           var res = canvas.toDataURL((/data:(.*?);/g.exec(this.img64) || ['', 'image/jpeg'])[1]); // base64
           console.log(res)
-          api.httpMethod('POST', 'media/setavatar/', {
+          api.httpJsonMethod('POST', 'media/setavatar/', {
             'base64': encodeURIComponent(res)
           }).then(res => {
             let that = this

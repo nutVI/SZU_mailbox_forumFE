@@ -5,9 +5,7 @@
         v-loading="commentObj.reply.loading">
         <el-table-column align="center" width="52" label="head">
           <template slot-scope="item">
-            <el-image class="avatar"
-              :src="item.row.creator.avatar||'https://cube.elemecdn.com/9/c2/f0ee8a3c7c9638a54940382568c9dpng.png'"
-              fit="cover" lazy>
+            <el-image class="avatar" :src="item.row.creator.avatar||$root.NULLAVATAR" fit="cover" lazy>
             </el-image>
           </template>
         </el-table-column>
@@ -112,7 +110,7 @@
       likeIt(id, index) {
         let isLike = this.commentObj.replies.replies[index].isLike
         if (!isLike) {
-          api.httpMethod('POST', 'addlike/', {
+          api.httpJsonMethod('POST', 'addlike/', {
             'id': id,
             'type': 'reply'
           }).then(() => {
@@ -122,7 +120,7 @@
             this.$message.error(e)
           })
         } else {
-          api.httpMethod('POST', 'cancelike/', {
+          api.httpJsonMethod('POST', 'cancelike/', {
             'id': id,
             'type': 'reply'
           }).then(() => {
@@ -135,7 +133,7 @@
       },
       getReply() {
         this.commentObj.reply.loading = true
-        api.httpMethod('GET', 'reply/', {
+        api.httpJsonMethod('GET', 'reply/', {
           'commentId': this.commentObj.id,
           'limit': this.limit,
           'offset': this.commentObj.reply.currentPage,
@@ -171,7 +169,7 @@
           }
           if (this.commentObj.reply.number == 0) postData['commentId'] = this.commentObj.reply.commentId
           else postData['repliedId'] = this.commentObj.reply.repliedId
-          api.httpMethod('POST', 'reply/', postData).then((data) => {
+          api.httpJsonMethod('POST', 'reply/', postData).then((data) => {
             this.$message.success('回复成功')
             this.commentObj.replies.total++;
             if (Math.ceil((this.commentObj.replies.total) / 10) > this.commentObj.reply.currentPage) {
@@ -198,7 +196,7 @@
           cancelButtonText: '取消',
           type: 'warning'
         }).then(() => {
-          api.httpMethod('DELETE', 'reply/', {
+          api.httpJsonMethod('DELETE', 'reply/', {
             'id': id
           }).then((data) => {
             this.$message.success('删除成功')

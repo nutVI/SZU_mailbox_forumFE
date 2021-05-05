@@ -1,13 +1,14 @@
 <template>
   <div>
+    <MessageBox v-if="true"></MessageBox>
     <div class="sidebar">
-      <el-menu :default-active="active" class="el-menu-vertical-demo" @select="selectIcon" :collapse="true">
-        <el-popover placement="right-start" width="300">
+      <el-menu :default-active="active" @select="selectIcon" :collapse="true">
+        <el-popover placement="right-start">
           <MessageBox v-if="popoverVisible"></MessageBox>
           <el-menu-item slot="reference" index="1">
-            <el-badge :hidden="!$root.MESSAGE" :value="$root.MESSAGE" :max="99" style="top:16px">
-              <el-image style="width: 24px; height: 24px;"
-                :src="$root.AVATAR||'https://cube.elemecdn.com/9/c2/f0ee8a3c7c9638a54940382568c9dpng.png'">
+            <el-badge :hidden="!($root.MESSAGE+$root.LIKE)" :value="$root.MESSAGE+$root.LIKE" :max="99"
+              style="top:16px">
+              <el-image style="width: 24px; height: 24px;" :src="$root.AVATAR||$root.NULLAVATAR">
               </el-image>
             </el-badge>
             <span slot="title">{{$root.NICKNAME}}</span>
@@ -34,7 +35,6 @@
         <el-button @click="dialogVisible = false">关闭</el-button>
       </span>
     </el-dialog>
-    {{popoverVisible}}
   </div>
 </template>
 
@@ -76,7 +76,7 @@
         }).then(({
           value
         }) => {
-          api.httpMethod("POST", "setnickname/", {
+          api.httpJsonMethod("POST", "setnickname/", {
             'nickname': value
           }).then((data) => {
             this.$root.NICKNAME = data['nickname']
@@ -89,7 +89,7 @@
           })
         }).catch((action) => {
           if (action === 'cancel')
-            api.httpMethod("POST", "setnickname/", {
+            api.httpJsonMethod("POST", "setnickname/", {
               'empty': 'empty'
             }).then((data) => {
               this.$root.NICKNAME = data['user']
