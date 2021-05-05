@@ -1,6 +1,5 @@
 <template>
   <div>
-    <MessageBox v-if="true"></MessageBox>
     <div class="sidebar">
       <el-menu :default-active="active" @select="selectIcon" :collapse="true">
         <el-popover placement="right-start">

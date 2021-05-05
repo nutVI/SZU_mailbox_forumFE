@@ -21,7 +21,7 @@
             <el-card>
               <el-row>
                 <el-col :span="4">
-                  <el-badge is-dot :hidden="!item.isread">
+                  <el-badge is-dot :hidden="item.isread">
                     <el-image class="avatar" :src="item.creator.avatar||$root.NULLAVATAR" fit="cover" lazy>
                     </el-image>
                   </el-badge>
@@ -39,7 +39,8 @@
                 {{item.reply.content}}
               </el-row>
               <el-row>
-                <el-link type="primary" :href="'https://www1.szu.edu.cn/mailbox/view.asp?id='+item.reply.post_id">
+                <el-link @click.native="readReply(item.id,index)" type="primary"
+                  :href="'https://www1.szu.edu.cn/mailbox/view.asp?id='+item.reply.post_id" target="_blank">
                   {{'信箱详情页: '+ item.reply.post}}</el-link>
               </el-row>
             </el-card>
@@ -62,7 +63,7 @@
     </el-row>
     <el-row style="margin-top:10px" type="flex" align="middle" justify="end">
       <el-col :span="6">
-        <el-button type="text" size="mini">全部收取</el-button>
+        <el-button @click="readReply()" type="text" size="mini">全部收取</el-button>
       </el-col>
     </el-row>
   </div>
@@ -113,6 +114,29 @@
               this.$set(data.msg[i].reply, 'post', str)
             })
           }
+        })
+      },
+      readReply(id, index) {
+        let data = {
+          'all': 1
+        }
+        if (id) {
+          if (this.replyMsg.arr[index].isread) return;
+          data = {
+            'id': id
+          }
+        }
+        api.httpJsonMethod('POST', 'msg/bereply/', data).then((res) => {
+          if (data.all) {
+            this.$message.success(res.result)
+            for (const i in this.replyMsg.arr) {
+              this.replyMsg.arr[i].isread = true
+            }
+          } else {
+            this.replyMsg.arr[index].isread = true
+          }
+        }).catch((e) => {
+          this.$message.error(e)
         })
       }
     }
