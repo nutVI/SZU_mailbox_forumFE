@@ -16,7 +16,7 @@ new Vue({
     return {
       UUID: -1,
       AVATAR: null,
-      NICKNAME: null,
+      NICKNAME: "未登录",
       MESSAGE: 0,
       LIKE: 0,
       NULLAVATAR: 'https://cube.elemecdn.com/9/c2/f0ee8a3c7c9638a54940382568c9dpng.png'

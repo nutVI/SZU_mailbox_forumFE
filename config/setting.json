@@ -1,6 +1,5 @@
 {
   "name": "SZU mailbox",
-  "description": "在深圳大学校务信箱中添加了评论和回复的功能",
-  "author": "nut",
-  "url": "https://www1.szu.edu.cn/mailbox/view.asp*"
+  "description": "在深圳大学校务信箱中添加了评论和回复以及一些辅助的功能",
+  "author": "nut"
 }

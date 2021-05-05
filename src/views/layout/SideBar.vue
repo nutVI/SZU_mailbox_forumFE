@@ -3,7 +3,7 @@
     <div class="sidebar">
       <el-menu :default-active="active" @select="selectIcon" :collapse="true">
         <el-popover placement="right-start">
-          <MessageBox v-if="popoverVisible"></MessageBox>
+          <MessageBox v-if="popoverVisible&&$root.UUID"></MessageBox>
           <el-menu-item slot="reference" index="1">
             <el-badge :hidden="!($root.MESSAGE+$root.LIKE)" :value="$root.MESSAGE+$root.LIKE" :max="99"
               style="top:16px">
