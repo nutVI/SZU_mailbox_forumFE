@@ -118,7 +118,7 @@
       }
     },
     mounted() {
-      this.postId = api.getQueryVariable("id")
+      this.postId = api.getPostID()
       let idTime = setInterval(() => {
         if (this.$root.UUID != -1) {
           clearInterval(idTime)

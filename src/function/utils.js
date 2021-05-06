@@ -10,6 +10,18 @@ export default {
     }
     return (false);
   },
+  getPostID() {
+    let postPath = document.querySelector("body > table > tbody > tr:nth-child(2) > td > table > tbody > tr:nth-child(3) > td > table > tbody > tr:nth-child(1) > td > table > tbody > tr > td:nth-child(1) > a:nth-child(2)")
+    const query = postPath.search.substring(1);
+    const vars = query.split("&");
+    for (let i = 0; i < vars.length; i++) {
+      const pair = vars[i].split("=");
+      if (pair[0] == "id") {
+        return pair[1];
+      }
+    }
+    return (false);
+  },
   loadInit() {
     const link = document.createElement('link');
     link.rel = 'stylesheet';
