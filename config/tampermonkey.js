@@ -10,5 +10,5 @@
 // @match        https://www1.szu.edu.cn/mailbox/
 // @require      https://cdn.jsdelivr.net/npm/vue@2.6.11/dist/vue.min.js
 // @require      https://cdn.jsdelivr.net/npm/element-ui@2.15.0/lib/index.js
-// @run-at       document-start
+// @run-at       document-body
 // ==/UserScript==

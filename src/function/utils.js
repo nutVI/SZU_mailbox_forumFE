@@ -40,6 +40,7 @@ export default {
     if (!this.getQueryVariable("id")) {
       father = document.body
     }
+    
     const divApp = document.createElement('div')
     divApp.id = 'app'
     father.append(divApp)
