@@ -1,6 +1,6 @@
 <template>
   <div style="width:960px">
-    <el-main v-if="postId!=0" class="my_table" style="width:90%;padding:0;">
+    <el-main v-if="$root.POSTID!=0" class="my_table" style="width:90%;padding:0;">
       <el-table :header-cell-style="headerStyle" :stripe="false" :data="comment" v-loading="loading"
         :cell-style="columnStyle">
         <el-table-column align="center" :label="'评论:' + total" width="96">
@@ -108,7 +108,6 @@
         currentPage: 1,
         total: 0,
         limit: 10,
-        postId: 0,
 
         comment: [],
         sort: "id",
@@ -118,7 +117,6 @@
       }
     },
     mounted() {
-      this.postId = api.getPostID()
       let idTime = setInterval(() => {
         if (this.$root.UUID != -1) {
           clearInterval(idTime)
@@ -155,7 +153,7 @@
       getComment() {
         this.loading = true;
         api.httpJsonMethod('GET', 'comment/', {
-          'postId': this.postId,
+          'postId': this.$root.POSTID,
           'limit': this.limit,
           'offset': this.currentPage,
         }).then((data) => {
@@ -196,7 +194,7 @@
       commentSubmit() {
         if (this.content.length >= 2) {
           api.httpJsonMethod('POST', 'comment/', {
-            'postId': this.postId,
+            'postId': this.$root.POSTID,
             'content': this.content,
             'isAnonymous': this.isAnonymous ? 1 : 0,
           }).then((data) => {

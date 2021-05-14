@@ -77,9 +77,7 @@ export default {
         });
     if (api.getQueryVariable("id")) {
       this.showURL = 1;
-      setTimeout(() => {
-        api2.changePrePage();
-      }, 1000);
+      api2.changePrePage(this.$root);
     }
   },
   methods: {

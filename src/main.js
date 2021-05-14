@@ -9,7 +9,6 @@ if (process.env.VUE_APP_ENVIRONMENT === "development") {
   Vue.use(ElementUI)
 }
 
-
 new Vue({
   render: h => h(App),
   data() {
@@ -19,7 +18,8 @@ new Vue({
       NICKNAME: "未登录",
       MESSAGE: 0,
       LIKE: 0,
-      NULLAVATAR: 'https://cube.elemecdn.com/9/c2/f0ee8a3c7c9638a54940382568c9dpng.png'
+      NULLAVATAR: 'https://cube.elemecdn.com/9/c2/f0ee8a3c7c9638a54940382568c9dpng.png',
+      POSTID: 0,
     }
   }
 }).$mount('#app')

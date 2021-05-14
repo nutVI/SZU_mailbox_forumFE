@@ -40,7 +40,7 @@ export default {
     if (!this.getQueryVariable("id")) {
       father = document.body
     }
-    
+
     const divApp = document.createElement('div')
     divApp.id = 'app'
     father.append(divApp)
@@ -86,12 +86,15 @@ export default {
     for (const i in data) {
       if (isFirst) {
         isFirst = false;
+        if (method == 'GET' || method == 'DELETE') {
+          str += '?'
+        }
         str += i + '=' + data[i]
       } else str += '&' + i + '=' + data[i]
     }
 
     if (method == 'GET' || method == 'DELETE') {
-      xml.open(method, url + '?' + str);
+      xml.open(method, url + str);
       xml.send(null);
     } else if (method == 'POST') {
       xml.open(method, url);
@@ -115,12 +118,15 @@ export default {
     for (const i in data) {
       if (isFirst) {
         isFirst = false;
+        if (method == 'GET' || method == 'DELETE') {
+          str += '?'
+        }
         str += i + '=' + data[i]
       } else str += '&' + i + '=' + data[i]
     }
 
     if (method == 'GET' || method == 'DELETE') {
-      xml.open(method, url + '?' + str);
+      xml.open(method, url + str);
       if (charset != undefined)
         xml.overrideMimeType("text/html;charset=" + charset)
       xml.send(null);
