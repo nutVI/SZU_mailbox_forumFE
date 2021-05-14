@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         targetName
 // @namespace    http://tampermonkey.net/
-// @version      1.1.0
+// @version      1.1.3
 // @description  targetDescription
 // @author       targetAuthor
 // @match        https://www1.szu.edu.cn/mailbox/view.asp*
