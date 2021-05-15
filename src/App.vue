@@ -73,10 +73,10 @@
         });
       if (api.getQueryVariable("id")) {
         this.showURL = 1;
-        api2.changePrePage(this.$root);
+        api2.changePrePage(this.$root, this);
         window.onpopstate = (e) => {
           this.showURL = 0;
-          api2.popstateListen(e, this.$root)
+          api2.popstateListen(e, this.$root, this)
           this.$nextTick(function () {
             this.showURL = 1;
           })
