@@ -23,7 +23,6 @@ export default {
 
         currentPage.href = "javascript:void(0);"
         currentPage.onclick = () => {
-            console.log(url, search)
             api.httpHtmlMethod("GET", url, {}, "gb2312").then((res) => {
                 vue.showURL = 0;
 
@@ -58,7 +57,6 @@ export default {
     },
 
     popstateListen(event, root, vue) {
-        console.log(event.state, root)
         root.POSTID = event.state.postid
 
         let prePage, nextPage;
